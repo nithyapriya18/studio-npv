@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { siteConfig, linkedinHref } from '@/config'
-import { reviewHref } from '@/lib/products'
+import { gameHref, reviewHref, roastHref } from '@/lib/products'
 import { Wordmark } from '@/components/wordmark'
 import { TrackedLink } from '@/components/tracked-link'
 
@@ -20,6 +20,8 @@ export function Footer() {
             <Link href="/start">How it works</Link>
             <Link href="/products">Products</Link>
             <Link href={reviewHref}>Crit</Link>
+            <Link href={roastHref}>Idea Roast</Link>
+            <Link href={gameHref}>Scope Creep</Link>
             <Link href="/writing">Writing</Link>
             <Link href="/about">About</Link>
           </div>

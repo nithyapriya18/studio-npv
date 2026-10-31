@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { siteConfig } from '@/config'
-import { REVIEW_PRODUCT, reviewHref } from '@/lib/products'
+import { GAME_PRODUCT, REVIEW_PRODUCT, ROAST_PRODUCT, gameHref, reviewHref, roastHref } from '@/lib/products'
 
 export const metadata: Metadata = {
   title: 'Privacy policy',
@@ -70,6 +70,22 @@ export default function PrivacyPage() {
           I can&apos;t see it, and clearing your browser data removes it.
         </p>
 
+        <h3>{ROAST_PRODUCT.name}</h3>
+        <p>
+          When you use <Link href={roastHref}>{ROAST_PRODUCT.name}</Link>, the idea you type
+          is sent to an AI service provider to write the roast. I don&apos;t store the idea
+          or the roast. I keep a count of roasts by IP address, which is how the limit of
+          three a day is applied. Share images are drawn in your browser and aren&apos;t
+          uploaded anywhere.
+        </p>
+
+        <h3>{GAME_PRODUCT.name}</h3>
+        <p>
+          <Link href={gameHref}>{GAME_PRODUCT.name}</Link> runs entirely in your browser.
+          Your best result is kept in your browser&apos;s local storage so the game can show
+          it next time; I can&apos;t see it.
+        </p>
+
         <h3>Resume downloads and profile visits</h3>
         <p>
           When you download my resume or follow the link to my LinkedIn profile from this
@@ -131,7 +147,7 @@ export default function PrivacyPage() {
           The analytics tool uses a cookie and your browser&apos;s local storage to
           recognise a returning visitor and group the pages of a single visit.{' '}
           {REVIEW_PRODUCT.name} also uses local storage to keep your own score history on
-          your device. I don&apos;t
+          your device, and {GAME_PRODUCT.name} uses it to remember your best result. I don&apos;t
           use advertising cookies or track you across other websites. You can block or
           delete cookies in your browser settings, and the site will still work.
         </p>
@@ -145,7 +161,7 @@ export default function PrivacyPage() {
           <li>Vercel, for hosting the website</li>
           <li>PostHog, for analytics and session recordings</li>
           <li>Supabase, for the database that holds the records and limits described above</li>
-          <li>Anthropic, the AI service that writes {REVIEW_PRODUCT.name} reviews</li>
+          <li>Anthropic, the AI service that writes {REVIEW_PRODUCT.name} reviews and {ROAST_PRODUCT.name} roasts</li>
           <li>Microlink, for taking screenshots of pages submitted by link</li>
           <li>Resend, for delivering contact form messages and comment notifications to my inbox</li>
         </ul>
@@ -161,7 +177,7 @@ export default function PrivacyPage() {
             {REVIEW_PRODUCT.name} records, resume download and profile visit records: up to
             12 months
           </li>
-          <li>Review counts used for the daily limit: reset every 24 hours</li>
+          <li>Review and roast counts used for the daily limits: reset every 24 hours</li>
           <li>Comments: until you ask me to remove them, or the post is taken down</li>
           <li>Analytics and session recordings: no longer than my analytics plan retains them</li>
           <li>
@@ -194,8 +210,9 @@ export default function PrivacyPage() {
 
         <h2>9. Automated reviews</h2>
         <p>
-          {REVIEW_PRODUCT.name} produces an automated review of the content you submit. It
-          assesses that content only, and isn&apos;t used to make decisions about you.
+          {REVIEW_PRODUCT.name} and {ROAST_PRODUCT.name} produce an automated review of the
+          content you submit. They assess that content only, and aren&apos;t used to make
+          decisions about you.
         </p>
 
         <h2>10. Children</h2>

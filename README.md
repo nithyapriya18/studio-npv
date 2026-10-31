@@ -12,7 +12,7 @@ Two Next.js apps, each its own Vercel project:
 
 - `apps/website` — the Studio NPV site, on studionpv.com (Vercel project
   `studio-npv`). Home, About, Start (how an engagement works), Writing, and
-  the free tools under `/products` (Crit, Scope Cutter).
+  the free tools under `/products` (Crit, Idea Roast, Scope Creep).
 - `apps/profile` — my personal profile, on nithyapriya.com (Vercel project
   `nithyapriya-profile`). One static page: experience, skills, education,
   resume. It borrows the studio's colours but not its type or marks, and

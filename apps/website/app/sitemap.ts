@@ -1,13 +1,15 @@
 import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/config'
 import { getAllPosts } from '@/lib/mdx'
-import { reviewHref } from '@/lib/products'
+import { gameHref, reviewHref, roastHref } from '@/lib/products'
 
 const STATIC_ROUTES = [
   { path: '', priority: 1 },
   { path: '/about', priority: 0.8 },
   { path: '/products', priority: 0.8 },
   { path: reviewHref, priority: 0.9 },
+  { path: roastHref, priority: 0.8 },
+  { path: gameHref, priority: 0.8 },
   { path: '/contact', priority: 0.9 },
   { path: '/start', priority: 0.7 },
   { path: '/writing', priority: 0.6 },

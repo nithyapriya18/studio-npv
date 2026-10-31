@@ -124,6 +124,32 @@ export async function reviewQuota(ip: string): Promise<Quota> {
   }
 }
 
+// Idea Roast has its own allowance and its own site-wide ceiling, so roasts
+// never use up Crit's reviews. A roast is shorter, so it costs less than a review.
+export const ROAST_PER_IP_LIMIT = 3
+const ROAST_DAILY_LIMIT = Number(process.env.IDEA_ROAST_DAILY_LIMIT ?? 100)
+
+export async function checkRoastLimits(ip: string) {
+  const mine = await check(`idea-roast-ip:${ip}`, ROAST_PER_IP_LIMIT, PER_IP_WINDOW_SECONDS)
+  if (!mine) return { success: false, scope: 'visitor' as const }
+  const site = await check('daily:idea-roast', ROAST_DAILY_LIMIT, DAILY_WINDOW_SECONDS)
+  return site ? { success: true } : { success: false, scope: 'site' as const }
+}
+
+/** How many roasts this visitor can still run today. */
+export async function roastQuota(ip: string): Promise<Quota> {
+  const [mine, site] = await Promise.all([
+    status(`idea-roast-ip:${ip}`, ROAST_PER_IP_LIMIT, PER_IP_WINDOW_SECONDS),
+    status('daily:idea-roast', ROAST_DAILY_LIMIT, DAILY_WINDOW_SECONDS),
+  ])
+  const siteIsTighter = site.remaining < mine.remaining
+  return {
+    remaining: Math.min(mine.remaining, site.remaining),
+    limit: ROAST_PER_IP_LIMIT,
+    resetsAt: siteIsTighter ? site.resetsAt : mine.resetsAt,
+  }
+}
+
 /** Contact form: a handful of messages per visitor per day, to stop spam. */
 export async function checkContactLimit(ip: string) {
   const success = await check(`contact-ip:${ip}`, 5, 24 * 60 * 60)

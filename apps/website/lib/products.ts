@@ -30,6 +30,32 @@ export const SCOPE_PRODUCT = {
 export const scopeHref = `/products/${SCOPE_PRODUCT.slug}`
 export const scopeUrl = `${siteConfig.url}${scopeHref}`
 
+export const ROAST_PRODUCT = {
+  name: 'Idea Roast',
+  slug: 'idea-roast',
+  tagline: 'Pitch your startup idea in a line or two. Get roasted, kindly, and leave with one test to run this week.',
+  description:
+    'Type your idea the way you’d pitch it at a party. You get a roast that’s funny but fair, the odds it survives first contact with real users, the risk that matters most, what’s genuinely good about it, and the cheapest way to test it this week. Share it as an image if you dare.',
+  note: 'Free · three roasts a day',
+  features: ['A roast that’s fair', 'Survival odds', 'The real risk', 'What’s good about it', 'A test for this week', 'Shareable card'],
+}
+
+export const roastHref = `/products/${ROAST_PRODUCT.slug}`
+export const roastUrl = `${siteConfig.url}${roastHref}`
+
+export const GAME_PRODUCT = {
+  name: 'Scope Creep',
+  slug: 'scope-creep',
+  tagline: 'A small game about shipping a first version before the feature requests bury it.',
+  description:
+    'Your first version is due in 90 days. Catch the features it actually needs and dodge everything else, like the AI chatbot, the dark mode and "can it also do payroll?" Every extra you catch costs you days. Ship before the clock runs out, then share your launch card.',
+  note: 'Free · about a minute a round',
+  features: ['Keyboard, mouse or touch', 'Gets harder as you go', 'Launch card to share', 'Your best run, remembered', 'No sign-up', 'Runs in your browser'],
+}
+
+export const gameHref = `/products/${GAME_PRODUCT.slug}`
+export const gameUrl = `${siteConfig.url}${gameHref}`
+
 // Scope Cutter is off the site while it's reworked: it asks too many
 // questions before it gives an answer. Add it back here and in the route.
-export const PRODUCTS = [REVIEW_PRODUCT]
+export const PRODUCTS = [REVIEW_PRODUCT, ROAST_PRODUCT, GAME_PRODUCT]

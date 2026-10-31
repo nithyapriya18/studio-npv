@@ -626,7 +626,7 @@ export function ReviewApp() {
                         </span>
                       </div>
                       <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-surface">
-                        <div className="h-full rounded-full" style={{ width: `${b.score * 10}%`, backgroundImage: 'var(--grad-button)' }} />
+                        <div className="h-full rounded-full bg-accent" style={{ width: `${b.score * 10}%` }} />
                       </div>
                       <p className="mt-3 text-sm leading-relaxed text-text-muted">{b.note}</p>
                     </li>
