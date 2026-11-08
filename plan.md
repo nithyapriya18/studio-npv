@@ -1,7 +1,7 @@
 # Studio NPV website — copy and positioning plan
 
 **Status:** executed. The 25-tool storefront (apps, `packages/catalog`, `docs/strategy`) has been removed; the repo is website-only. Public copy matches this plan.
-**Remote:** [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios)
+**Remote:** [github.com/nithyapriya18/studio-npv](https://github.com/nithyapriya18/studio-npv)
 **This file is for:** rewrite every public line so the site sounds like a senior operator, not a manifesto.
 
 ---
@@ -265,7 +265,7 @@ Home never teaches this list. It lives on `/start`. Footer can still say Nava is
 4. Rewrite Support, Privacy, Terms, Refunds, 404, footer, nav as needed.  
 5. Remove or reconcile unused `hero.tsx` / competing CTAs.  
 6. Sweep remaining user-facing Verity; leave storage legacy prefixes with a comment.  
-7. Fix GitHub README + About URL to nava-studios.  
+7. Fix GitHub README + About URL to studio-npv.  
 8. Walk the ideal flow locally. No push unless you ask.
 
 ---

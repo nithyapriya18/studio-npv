@@ -4,7 +4,7 @@ One-person services studio in Bengaluru. Nithyapriya Veeraraghavan takes an
 idea and builds the first version a small or mid-size team can use.
 
 Studio: [studionpv.com](https://studionpv.com) · Profile: [nithyapriya.com](https://www.nithyapriya.com)
-Repo: [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios)
+Repo: [github.com/nithyapriya18/studio-npv](https://github.com/nithyapriya18/studio-npv)
 
 ## Layout
 
