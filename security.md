@@ -513,7 +513,7 @@ That is the entire delta.
 
 ---
 
-## 10. Project Secure Coding Baseline (Nava Studios GST Mobile)
+## 10. Project Secure Coding Baseline (Studio NPV GST Mobile)
 
 This section defines repository-level secure coding practices for the GST mobile app and related services.
 

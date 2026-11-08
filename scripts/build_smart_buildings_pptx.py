@@ -22,7 +22,7 @@ RULE = RGBColor(0x2A, 0x35, 0x4D)
 
 W = Inches(13.333)
 H = Inches(7.5)
-OUT = Path("/Users/nithya-verity/Downloads/Nava Studios/Future-of-Smart-Buildings-BMS-IoT-AI.pptx")
+OUT = Path("/Users/nithya-verity/Downloads/Studio NPV/Future-of-Smart-Buildings-BMS-IoT-AI.pptx")
 
 SLIDES = [
     {

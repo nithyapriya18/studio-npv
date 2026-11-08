@@ -1,4 +1,4 @@
-# Nava Studios
+# Studio NPV
 
 One-person services studio in Bengaluru. Nithyapriya Veeraraghavan takes an
 idea and builds the first version a small or mid-size team can use.

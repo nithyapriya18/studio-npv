@@ -1,4 +1,4 @@
-# Nava Studios website — copy and positioning plan
+# Studio NPV website — copy and positioning plan
 
 **Status:** executed. The 25-tool storefront (apps, `packages/catalog`, `docs/strategy`) has been removed; the repo is website-only. Public copy matches this plan.
 **Remote:** [github.com/nithyapriya18/nava-studios](https://github.com/nithyapriya18/nava-studios)
@@ -31,7 +31,7 @@
 | Offer B | One subtle clause under the hero, not a section. |
 | City | **Bengaluru** (not Bangalore). |
 | Duration | “A few weeks” is allowed. Do **not** imply unpaid work. No prices, but never “free.” |
-| Byline | **Founder, Nava Studios** under the photo — not Senior AI Product Manager. |
+| Byline | **Founder, Studio NPV** under the photo — not Senior AI Product Manager. |
 
 ### Round 3 (partial)
 
@@ -39,7 +39,7 @@
 |---|---|
 | Personal work URL | `/lab` — personal projects, not clients. |
 | First call | **Unpaid.** It exists to understand the idea and send a quote. Copy must not read as “I work for free.” The build starts only after they accept the quote. |
-| Ownership | **Default: hand over** — their repo, their hosting, they run it. Nava does not keep the product hostage. Optional: Nava keeps hosting if they ask. **Portfolio:** ask permission to list the work and use screenshots; optional “Built by Nava Studios” credit on the product. Personal `/lab` stays until real clients exist. |
+| Ownership | **Default: hand over** — their repo, their hosting, they run it. Studio NPV does not keep the product hostage. Optional: Studio NPV keeps hosting if they ask. **Portfolio:** ask permission to list the work and use screenshots; optional “Built by Studio NPV” credit on the product. Personal `/lab` stays until real clients exist. |
 | Nine | **Set 2:** Call, Scope, Quote, Kickoff, Build, Review, Feedback, Handoff, **Continue**. No Restate, no Fix, no After. |
 
 ---
@@ -48,7 +48,7 @@
 
 **Visitor:** a founder (often first-time) who has an **idea** and needs a first product they can put in front of users. Operators with an internal process to productize are welcome, but they are not who the hero is written for.
 
-**One job of the site:** make that person trust that **Nithya (Nava Studios)** can take their idea (or a brief, if they have one) and ship an MVP they can run — one person, practical, no theatre — then **book a call**.
+**One job of the site:** make that person trust that **Nithya (Studio NPV)** can take their idea (or a brief, if they have one) and ship an MVP they can run — one person, practical, no theatre — then **book a call**.
 
 It is **not** the job of this site to sell 25 tiny SaaS SKUs, lecture visitors about their “messy” processes, or prove you are bigger than enterprise software.
 
@@ -56,7 +56,7 @@ It is **not** the job of this site to sell 25 tiny SaaS SKUs, lecture visitors a
 
 ## 2. What is actually on the site today
 
-The live site (`apps/website`) is already mostly branded **Nava Studios**. The remaining **Verity** strings are leftover docs, comments, storage prefixes, Cursor permissions, and GitHub metadata — not the hero. The problem is **voice, positioning, and proof**, not the word swap.
+The live site (`apps/website`) is already mostly branded **Studio NPV**. The remaining **Verity** strings are leftover docs, comments, storage prefixes, Cursor permissions, and GitHub metadata — not the hero. The problem is **voice, positioning, and proof**, not the word swap.
 
 ### Identity split (the real bug)
 
@@ -165,7 +165,7 @@ Draft voice chart:
 
 ## 4. Positioning (locked direction)
 
-**One-liner:** Nava Studios is Nithya. I take your idea and build the first version you can actually use.
+**One-liner:** Studio NPV is Nithya. I take your idea and build the first version you can actually use.
 
 **For (stated positively):** founders who need an MVP. Also people who already run a process and want it as software — mentioned once, not the headline.
 
@@ -175,7 +175,7 @@ Draft voice chart:
 
 **Proof:** decade of shipping (engineer → data science → product). Personal projects on a one-word route. Resume. No invented clients.
 
-**Name:** Nava Studios on every human-readable surface. `verity:` only as legacy storage keys. GitHub About / Vercel / strategy docs still need the rename.
+**Name:** Studio NPV on every human-readable surface. `verity:` only as legacy storage keys. GitHub About / Vercel / strategy docs still need the rename.
 
 **Voice:** practical, first person, no saviour story.
 
@@ -238,7 +238,7 @@ Home never teaches this list. It lives on `/start`. Footer can still say Nava is
 
 ## 6. Ideal end-to-end flow (what we verify after execute)
 
-1. Land on Home → know: Nava is Nithya; she turns ideas into a first product; book a call.  
+1. Land on Home → know: Studio NPV is Nithya; she turns ideas into a first product; book a call.  
 2. Optional About for career proof. Optional Work clearly marked personal.  
 3. Start → know what the call is, that price comes after, no “not a fit” list.  
 4. Book a call works (or a visible placeholder if the Calendly URL is still missing).  

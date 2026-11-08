@@ -1,5 +1,5 @@
 {
-  "name": "nava-studios",
+  "name": "studio-npv",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
@@ -7,10 +7,10 @@
     "apps/profile"
   ],
   "scripts": {
-    "dev": "npm run dev -w @nava-studios/website",
-    "dev:profile": "npm run dev -w @nava-studios/profile",
-    "build": "npm run build -w @nava-studios/website && npm run build -w @nava-studios/profile",
-    "lint": "npm run lint -w @nava-studios/website && npm run lint -w @nava-studios/profile",
+    "dev": "npm run dev -w @studio-npv/website",
+    "dev:profile": "npm run dev -w @studio-npv/profile",
+    "build": "npm run build -w @studio-npv/website && npm run build -w @studio-npv/profile",
+    "lint": "npm run lint -w @studio-npv/website && npm run lint -w @studio-npv/profile",
     "format": "prettier --write ."
   },
   "devDependencies": {
