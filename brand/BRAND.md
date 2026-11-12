@@ -152,6 +152,29 @@ Write plainly and directly, in the first person. Say what it costs and what you 
 - Add gradients, glows, emoji or stock imagery.
 - Animate anything that loops or follows the cursor.
 
+## 10. Credit line: on everything, always
+
+Everything the studio makes carries a credit back to the studio. This is mandatory, for our own work and for client work.
+
+**The line:** **{Product} by Studio NPV**, linked to https://studionpv.com, followed by the tagline where there is room:
+
+> Drawset by Studio NPV · Have an idea? Let's build it. · studionpv.com
+
+- **{Product}** is the product or piece's own name (Drawset, Crit, Growth OS). When a piece has no product name, use "Built by Studio NPV".
+- **On screen:** set "studio npv" as the wordmark, and make it a link to https://studionpv.com. In plain text and files, write "Studio NPV".
+- **Tagline:** "Have an idea? Let's build it.", from the website. Drop it only when space is tight; never drop the credit.
+
+| Where | How |
+|---|---|
+| Apps and product UI | Footer on every screen, with the link |
+| Generated files (PDF, DWG, documents, exports) | One small line on every page or sheet, plus the file's Creator / Author metadata |
+| Decks | Last slide, plus a small footer on the title slide |
+| READMEs, docs, skills | The first line under the title |
+| Command-line tools | The help text and the version output |
+| Emails and social posts | The signature, or the wordmark bottom-left |
+
+**Client work:** the client's brand leads; the credit sits small and quiet (bottom margin or footer), never in their logo or title block.
+
 ## Using it outside the website
 
 - **Decks:** made in either scheme. Light for printing and bright rooms; dark for screens and dim rooms.
