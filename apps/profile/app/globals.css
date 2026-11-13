@@ -413,6 +413,9 @@ a.t:hover {
 .hero > :nth-child(4) {
   animation-delay: 240ms;
 }
+.hero > :nth-child(5) {
+  animation-delay: 320ms;
+}
 @keyframes rise {
   from {
     opacity: 0;
@@ -420,15 +423,13 @@ a.t:hover {
   }
 }
 .hero-t {
-  font: 400 clamp(44px, 6.4vw, 84px) / 0.98 var(--serif);
+  font: 400 clamp(52px, 7.4vw, 96px) / 0.95 var(--serif);
   letter-spacing: -0.015em;
 }
-.hero-t em {
-  text-decoration: underline;
-  text-decoration-color: var(--mark);
-  text-decoration-thickness: 4px;
-  text-underline-offset: 8px;
-  text-decoration-skip-ink: none;
+.hero-role {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
 }
 .lede {
   font-size: 18px;

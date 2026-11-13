@@ -48,13 +48,14 @@ export default function Home() {
         <Spotlight className="grid">
           {/* Who I am, and the two ways in. */}
           <section id="top" className="t hero spot" aria-labelledby="hero-h">
-            <span className="eyebrow">Product leader · Engineer at heart · {siteConfig.location}</span>
+            <span className="eyebrow">{siteConfig.location}</span>
             <h1 id="hero-h" className="hero-t">
-              I take AI products from <em>idea to in-use</em>, and I can build the first version myself.
+              Nithyapriya <em>Veeraraghavan</em>
             </h1>
+            <p className="hero-role">Head of Product · Founder · Product management</p>
             <p className="lede">
-              Ten years across engineering, data science and product. Healthcare at Novartis, supply chain at
-              Resilinc, agentic AI at startups.
+              Ten years building software, the last six leading AI products in healthcare, supply chain and
+              retail, at Novartis, Resilinc and early-stage startups.
             </p>
             <div className="cta">
               <TrackedLink
