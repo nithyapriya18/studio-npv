@@ -47,7 +47,7 @@ export const PATH = [
 
 export const ROLES = [
   {
-    title: 'Head of Product Management',
+    title: 'VP of Product',
     org: 'PetaSight',
     dates: 'Feb 2026 – Present',
     points: [

@@ -52,7 +52,7 @@ export default function Home() {
             <h1 id="hero-h" className="hero-t">
               Nithyapriya <em>Veeraraghavan</em>
             </h1>
-            <p className="hero-role">Head of Product · Founder · Product management</p>
+            <p className="hero-role">VP of Product · Founder · Product management</p>
             <p className="lede">
               Ten years building software, the last six leading AI products in healthcare, supply chain and
               retail, at Novartis, Resilinc and early-stage startups.
@@ -92,7 +92,7 @@ export default function Home() {
             <figcaption className="now">
               <span className="dot" aria-hidden />
               <span>
-                <b>Now:</b> Head of Product at PetaSight, building a healthcare AI platform
+                <b>Now:</b> VP of Product at PetaSight, building a healthcare AI platform
               </span>
             </figcaption>
           </figure>
