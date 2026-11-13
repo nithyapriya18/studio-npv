@@ -5,67 +5,38 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { TrackedLink } from '@/components/tracked-link'
 import { siteConfig } from '@/config'
 
-export const SECTIONS = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'skills', label: 'Skills' },
+const SECTIONS = [
+  { id: 'experience', label: 'Work' },
+  { id: 'built', label: 'Built' },
   { id: 'writing', label: 'Writing' },
   { id: 'contact', label: 'Contact' },
 ]
 
-/**
- * Clear over the intro, frosted once you scroll. A marigold line along its
- * bottom edge fills with your progress down the page (--p, set by ScrollFx),
- * and the section you're reading is marked.
- */
+/** Name, section chips, theme and resume. Frosted once you scroll. */
 export function Header() {
   const [solid, setSolid] = useState(false)
-  const [active, setActive] = useState<string | null>(null)
 
   useEffect(() => {
-    const onScroll = () => {
-      setSolid(window.scrollY > 24)
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
-        setActive(SECTIONS[SECTIONS.length - 1].id)
-      }
-    }
-    // A section counts as current once its top passes the upper third of the screen.
-    const io = new IntersectionObserver(
-      (entries) => {
-        const seen = entries.filter((e) => e.isIntersecting).map((e) => e.target.id)
-        if (seen.length) setActive(seen[seen.length - 1])
-      },
-      { rootMargin: '0px 0px -66% 0px' },
-    )
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id)
-      if (el) io.observe(el)
-    })
+    const onScroll = () => setSolid(window.scrollY > 12)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      io.disconnect()
-      window.removeEventListener('scroll', onScroll)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <header className={`top${solid ? ' solid' : ''}`}>
-      <div className="top-bar">
+    <header className={`bar${solid ? ' solid' : ''}`}>
+      <div className="bar-in">
         <a href="#top" className="brand" aria-label={`${siteConfig.name}, back to top`}>
-          <span className="mono-mark" aria-hidden>
-            NV
-          </span>
-          <span className="brand-name">{siteConfig.short}</span>
+          Nithyapriya <span className="brand-last">Veeraraghavan</span>
         </a>
-        <nav className="top-nav" aria-label="Sections">
+        <nav className="bar-nav" aria-label="Sections">
           {SECTIONS.map((s) => (
-            <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? 'true' : undefined}>
+            <a key={s.id} href={`#${s.id}`} className="chip">
               {s.label}
             </a>
           ))}
         </nav>
-        <div className="top-actions">
+        <div className="bar-actions">
           <ThemeToggle />
           <TrackedLink
             href={siteConfig.resumeFile}
@@ -78,7 +49,6 @@ export function Header() {
           </TrackedLink>
         </div>
       </div>
-      <span className="progress" aria-hidden />
     </header>
   )
 }

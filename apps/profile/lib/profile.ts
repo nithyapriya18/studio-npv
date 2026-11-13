@@ -7,26 +7,43 @@ import { studio } from '@/config'
 
 // Shown as count-ups: prefix + value + suffix, e.g. $6.4M.
 export const STATS = [
-  { prefix: '', value: 10, decimals: 0, suffix: '+ yrs', t: 'across engineering, data science and product' },
-  { prefix: '$', value: 6.4, decimals: 1, suffix: 'M', t: 'documented cost savings from an NLP platform at Novartis' },
-  { prefix: '', value: 500, decimals: 0, suffix: 'K+', t: 'enterprise users on supply chain AI at Resilinc' },
-  { prefix: '', value: 75, decimals: 0, suffix: '%', t: 'enterprise adoption of AI proofs of concept at Novartis' },
+  { prefix: '', value: 10, decimals: 0, suffix: '+', t: 'years across engineering, data science and product' },
+  { prefix: '$', value: 6.4, decimals: 1, suffix: 'M', t: 'saved by an NLP platform I launched at Novartis' },
+  { prefix: '', value: 500, decimals: 0, suffix: 'K+', t: 'enterprise users on supply chain AI I owned at Resilinc' },
+  { prefix: '', value: 75, decimals: 0, suffix: '%', t: 'of my AI proofs of concept adopted by the business' },
 ]
 
-/** My own studio. It gets a little more room on the page than a role. */
+/** My own studio, and what it has shipped: one product of its own and one client site. */
 export const STUDIO = {
-  title: 'Founder',
-  org: 'Studio NPV',
-  dates: '2026 – Present',
-  body: 'My own product studio. I scope, design and build first versions of software for founders and small businesses, for a fixed price agreed before work starts. I built its first product myself, from idea to production, and run it in public:',
-  products: [
-    {
-      name: 'Crit',
-      href: studio('/products/crit'),
-      body: 'Reviews a landing page in about 30 seconds: a score, what a first-time visitor won’t understand, and the fixes.',
-    },
-  ],
+  name: 'Studio NPV',
+  href: studio(),
+  body: 'My own studio. I scope, design and build first versions of software for founders and small businesses, at a fixed price agreed before work starts.',
 }
+
+export const BUILT = [
+  {
+    kind: 'Product · Live',
+    name: 'Crit',
+    href: studio('/products/crit'),
+    body: 'A 30-second crit of your landing page: a score, what a first-time visitor won’t understand, and the fixes ready to use.',
+    cta: 'Try Crit',
+  },
+  {
+    kind: 'Client work · Website design',
+    name: 'The Pearls Montessori',
+    href: 'https://thepearls.in',
+    body: 'Designed and built the school’s new website from scratch: a fast, secure site with a visit-booking and enquiry form that goes straight to the school.',
+    cta: 'Visit thepearls.in',
+  },
+]
+
+/** The four careers, oldest first; the last one is where I am now. */
+export const PATH = [
+  { year: '2014', title: 'Engineer', t: 'Test frameworks, production fixes' },
+  { year: '2018', title: 'Data scientist', t: 'Clinical trial models, dashboards' },
+  { year: '2020', title: 'Product lead', t: 'Healthcare, supply chain, agents' },
+  { year: '2026', title: 'Founder', t: 'Studio NPV, building in public' },
+]
 
 export const ROLES = [
   {
