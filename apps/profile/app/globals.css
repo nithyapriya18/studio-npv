@@ -293,15 +293,6 @@ a:hover .arr {
 .theme-btn:hover {
   border-color: var(--ink);
 }
-.btn-gold {
-  background: var(--venture);
-  border: 1.5px solid var(--mark);
-}
-.btn-gold:hover {
-  border-color: var(--mark);
-  background: color-mix(in srgb, var(--mark) 22%, var(--venture));
-}
-
 /* Header: name, section chips, theme, resume; frosted once you scroll. */
 .bar {
   position: sticky;
@@ -437,10 +428,64 @@ a.t:hover {
   color: var(--muted);
   max-width: 620px;
 }
-.cta {
+.doors {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  max-width: 680px;
+}
+.door {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  border-radius: 16px;
+}
+.door-q {
+  font: 500 12px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.door-a {
+  font-size: 19px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 2px 0 10px;
+}
+.door-a:hover .arr {
+  transform: translateX(4px);
+}
+.door-mail {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.door-hire {
+  background: var(--btn);
+  color: var(--on-btn);
+}
+.door-hire .door-q,
+.door-hire .door-mail {
+  color: var(--studio-muted);
+  border-color: rgb(255 255 255 / 0.22);
+}
+.door-hire a:hover {
+  color: #f5b53f;
+}
+.door-build {
+  background: var(--venture);
+  border: 1.5px solid var(--mark);
+  color: var(--ink);
+}
+.door-build .door-q,
+.door-build .door-mail {
+  color: var(--muted);
+  border-color: var(--venture-rule);
+}
+.door-build a:hover {
+  color: var(--accent);
 }
 
 .photo {
@@ -817,7 +862,8 @@ a.studio:hover {
   .steps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .facts {
+  .facts,
+  .doors {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .role ul {
@@ -921,7 +967,7 @@ a.studio:hover {
 
 @media print {
   .bar,
-  .cta,
+  .doors,
   .theme-btn {
     display: none !important;
   }

@@ -3,7 +3,7 @@ import { Spotlight } from '@/components/effects'
 import { Header } from '@/components/header'
 import { ScrollFx } from '@/components/scroll-fx'
 import { TrackedLink } from '@/components/tracked-link'
-import { siteConfig, mailtoHref, studio } from '@/config'
+import { siteConfig, mailtoHref, studio, studioMailtoHref } from '@/config'
 import {
   BUILT,
   CERTIFICATION,
@@ -57,27 +57,47 @@ export default function Home() {
               Ten years building software, the last six leading AI products in healthcare, supply chain and
               retail, at Novartis, Resilinc and early-stage startups.
             </p>
-            <div className="cta">
-              <TrackedLink
-                href={siteConfig.resumeFile}
-                download
-                event="resume_downloaded"
-                properties={{ location: 'hero' }}
-                className="btn btn-primary"
-              >
-                Hiring? Get my resume
-              </TrackedLink>
-              <TrackedLink
-                href={studio()}
-                event="studio_opened"
-                properties={{ location: 'hero' }}
-                className="btn btn-gold"
-              >
-                Need something built?
-              </TrackedLink>
-              <TrackedLink href={mailtoHref} event="email_clicked" properties={{ location: 'hero' }} className="btn">
-                Email
-              </TrackedLink>
+            {/* Two ways in: a question, its answer, and the address to write to. */}
+            <div className="doors">
+              <div className="door door-hire">
+                <span className="door-q">Hiring?</span>
+                <TrackedLink
+                  href={siteConfig.resumeFile}
+                  download
+                  event="resume_downloaded"
+                  properties={{ location: 'hero' }}
+                  className="door-a"
+                >
+                  Get my resume <Arrow />
+                </TrackedLink>
+                <TrackedLink
+                  href={mailtoHref}
+                  event="email_clicked"
+                  properties={{ location: 'hero' }}
+                  className="door-mail"
+                >
+                  {siteConfig.email}
+                </TrackedLink>
+              </div>
+              <div className="door door-build">
+                <span className="door-q">Need something built?</span>
+                <TrackedLink
+                  href={studio()}
+                  event="studio_opened"
+                  properties={{ location: 'hero' }}
+                  className="door-a"
+                >
+                  Start at Studio NPV <Arrow />
+                </TrackedLink>
+                <TrackedLink
+                  href={studioMailtoHref}
+                  event="studio_email_clicked"
+                  properties={{ location: 'hero' }}
+                  className="door-mail"
+                >
+                  {siteConfig.studioEmail}
+                </TrackedLink>
+              </div>
             </div>
           </section>
 

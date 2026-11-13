@@ -10,9 +10,11 @@ export const siteConfig = {
   linkedin: 'https://linkedin.com/in/npv',
   resumeFile: '/Nithyapriya-Veeraraghavan.pdf',
   studioUrl: 'https://studionpv.com',
+  studioEmail: 'hello@studionpv.com',
 }
 
 export const mailtoHref = `mailto:${siteConfig.email}`
+export const studioMailtoHref = `mailto:${siteConfig.studioEmail}`
 
 /** A page on the studio site, for example studio('/products/crit'). */
 export const studio = (path = '') => `${siteConfig.studioUrl}${path}`
