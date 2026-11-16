@@ -83,6 +83,9 @@ export function Nav() {
           <a href={contactHref} className="btn-primary btn-sm" {...ctaProps}>
             {contactLabel}
           </a>
+          <Link href="/admin" prefetch={false} rel="nofollow" className="btn-quiet btn-sm">
+            Sign in
+          </Link>
           <button
             type="button"
             className="menu-btn"
@@ -103,6 +106,9 @@ export function Nav() {
             <a href={contactHref} className="btn btn-primary" {...ctaProps}>
               {contactLabel}
             </a>
+            <Link href="/admin" prefetch={false} rel="nofollow">
+              Sign in
+            </Link>
           </nav>
         )}
       </div>

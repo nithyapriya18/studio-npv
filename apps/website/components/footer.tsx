@@ -60,11 +60,6 @@ export function Footer() {
         <div className="ftr-base">
           <span className="muted" style={{ fontSize: 13 }}>
             © {new Date().getFullYear()} {siteConfig.name}
-            {' · '}
-            {/* The owner's way into the studio admin; opens Today if already signed in. */}
-            <Link href="/admin" prefetch={false} rel="nofollow">
-              Sign in
-            </Link>
           </span>
           <span className="hand" style={{ fontSize: 18 }}>
             made by hand in {siteConfig.location}
