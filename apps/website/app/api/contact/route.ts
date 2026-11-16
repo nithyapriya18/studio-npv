@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkContactLimit, clientIp } from '@/lib/rate-limit'
 import { siteConfig } from '@/config'
+import { recordWebsiteLead } from '@/lib/admin/store'
 
 export const runtime = 'nodejs'
 
@@ -84,6 +85,8 @@ export async function POST(req: NextRequest) {
       console.error('[contact] Resend error', res.status, await res.text())
       throw new Error('send failed')
     }
+    // Also track it as a lead in the studio admin (/admin/leads).
+    await recordWebsiteLead({ name, email, company, message })
     return NextResponse.json({ ok: true })
   } catch {
     return NextResponse.json(

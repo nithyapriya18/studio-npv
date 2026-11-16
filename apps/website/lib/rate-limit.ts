@@ -162,6 +162,18 @@ export async function checkCommentLimit(ip: string) {
   return { success }
 }
 
+/**
+ * Admin sign-in (/admin/login): a few tries per visitor every 15 minutes,
+ * and a site-wide ceiling per hour so spreading guesses across many IPs
+ * doesn't help either.
+ */
+export async function checkAdminLoginLimit(ip: string) {
+  const mine = await check(`admin-login-ip:${ip}`, 5, 15 * 60)
+  if (!mine) return { success: false }
+  const site = await check('admin-login:global', 50, 60 * 60)
+  return { success: site }
+}
+
 export function clientIp(headers: Headers) {
   const forwarded = headers.get('x-forwarded-for')
   if (forwarded) return forwarded.split(',')[0]!.trim()

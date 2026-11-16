@@ -1,0 +1,32 @@
+/* Studio admin only. Status colours that follow the light/dark scheme
+   (the site's toggle sets data-theme, so Tailwind's dark: variant can't be used). */
+:root {
+  --adm-good-bg: rgba(22, 128, 74, 0.13);
+  --adm-good-fg: #146c3f;
+  --adm-bad-bg: rgba(194, 64, 30, 0.12);
+  --adm-bad-fg: #9e3417;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --adm-good-bg: rgba(74, 222, 128, 0.16);
+    --adm-good-fg: #8ee6ad;
+    --adm-bad-bg: rgba(255, 143, 107, 0.16);
+    --adm-bad-fg: #ffb39a;
+  }
+}
+:root[data-theme="dark"] {
+  --adm-good-bg: rgba(74, 222, 128, 0.16);
+  --adm-good-fg: #8ee6ad;
+  --adm-bad-bg: rgba(255, 143, 107, 0.16);
+  --adm-bad-fg: #ffb39a;
+}
+.adm-good { background: var(--adm-good-bg); color: var(--adm-good-fg); }
+.adm-bad { background: var(--adm-bad-bg); color: var(--adm-bad-fg); }
+.adm-alert { background: var(--adm-bad-bg); color: var(--adm-bad-fg); border-color: var(--adm-bad-fg); }
+.adm-bad-text { color: var(--adm-bad-fg); }
+
+/* Printing an invoice: only the invoice sheet. */
+@media print {
+  .adm-no-print { display: none !important; }
+  body { background: #fff !important; }
+}

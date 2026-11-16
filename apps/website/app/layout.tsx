@@ -3,6 +3,7 @@ import { Instrument_Sans, Instrument_Serif, Kalam } from 'next/font/google'
 import './globals.css'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
+import { HideOnAdmin } from '@/components/hide-on-admin'
 import { themeBoot } from '@/components/theme-toggle'
 import { siteConfig } from '@/config'
 
@@ -68,11 +69,15 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Nav />
+        <HideOnAdmin>
+          <Nav />
+        </HideOnAdmin>
         <main id="content" className="wrap">
           {children}
         </main>
-        <Footer />
+        <HideOnAdmin>
+          <Footer />
+        </HideOnAdmin>
       </body>
     </html>
   )
