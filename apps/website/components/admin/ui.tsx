@@ -57,7 +57,7 @@ export function Stat({ label, value, sub, href }: { label: string; value: ReactN
 
 /** Status words and the colour each one gets. */
 const tones: Record<string, Tone> = {
-  New: 'warn', Contacted: 'wait', 'Call booked': 'ok', 'Proposal sent': 'ok', Won: 'ok', Lost: 'line',
+  New: 'warn', Contacted: 'wait', 'Call booked': 'ok', 'Proposal sent': 'ok', Won: 'ok', Lost: 'line', Spam: 'bad',
   Planning: 'wait', 'In progress': 'ok', 'With client': 'warn', Live: 'ok', 'On hold': 'line', Done: 'line',
   'To do': 'wait', Doing: 'ok',
   Draft: 'line', Sent: 'ok', Paid: 'ok', Cancelled: 'line', Overdue: 'bad', Late: 'bad',

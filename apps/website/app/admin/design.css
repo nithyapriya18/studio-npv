@@ -429,3 +429,12 @@ body:has(.adm-root) main.wrap{max-width:none;padding:0}
 .a-toolbar{display:flex;gap:6px;flex-wrap:wrap}
 .a-tool{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;font-size:13px;font-weight:500}
 .a-tool:hover{border-color:var(--accent)}
+/* Confirmation after a save */
+.a-toast-wrap{position:fixed;left:0;right:0;bottom:24px;display:flex;justify-content:center;pointer-events:none;z-index:50;padding:0 16px}
+.a-toast{pointer-events:auto;display:flex;align-items:center;gap:10px;min-height:48px;padding:0 8px 0 18px;border-radius:999px;background:var(--deep);color:#FFFFFF;font-weight:500;font-size:15px;box-shadow:0 10px 30px rgba(10,12,40,.28);border:2px solid var(--marigold);animation:a-toast-in .22s ease-out}
+.a-toast .a-ic{color:var(--marigold);stroke-width:2.5}
+.a-toast-x{background:none;border:0;color:#C9CCEE;font-size:22px;line-height:1;width:36px;height:36px;border-radius:50%;cursor:pointer}
+.a-toast-x:hover{color:#FFFFFF;background:rgba(255,255,255,.1)}
+@keyframes a-toast-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.a-toast{animation:none}}
+@container app (max-width:720px){.a-toast-wrap{bottom:92px}}

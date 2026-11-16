@@ -34,7 +34,8 @@ import { siteConfig } from '@/config'
 function str(fd: FormData, key: string, max = 2000): string | null {
   const v = fd.get(key)
   if (typeof v !== 'string') return null
-  const t = v.trim().slice(0, max)
+  // Browsers send line breaks as \r\n; store plain \n.
+  const t = v.replace(/\r\n?/g, '\n').trim().slice(0, max)
   return t || null
 }
 function required(fd: FormData, key: string, label: string, max = 300) {
@@ -70,9 +71,16 @@ function back(fd: FormData, fallback: string) {
   const v = str(fd, 'back', 300)
   return v && v.startsWith('/admin') && !v.startsWith('//') ? v : fallback
 }
-function done(path: string): never {
+/** Adds ?flash=… so the page shows a short confirmation (see AdminToast). */
+function withFlash(path: string, flash: string) {
+  const [base, hash = ''] = path.split('#')
+  const sep = base!.includes('?') ? '&' : '?'
+  return `${base}${sep}flash=${encodeURIComponent(flash)}${hash ? `#${hash}` : ''}`
+}
+
+function done(path: string, flash?: string): never {
   revalidatePath('/admin', 'layout')
-  redirect(path)
+  redirect(flash ? withFlash(path, flash) : path)
 }
 
 // ---------- sign in / out ----------
@@ -157,18 +165,19 @@ export async function saveLead(fd: FormData) {
   }
   if (leadId) {
     await updateRow('admin_leads', leadId, values)
-    done(back(fd, `/admin/leads/${leadId}`))
+    done(back(fd, `/admin/leads/${leadId}`), 'Lead saved')
   }
   const row = await insertRow('admin_leads', values)
-  done(`/admin/leads/${row.id}`)
+  done(`/admin/leads/${row.id}`, 'Lead added')
 }
 
 export async function setLeadStage(fd: FormData) {
   await requireAdmin()
   const leadId = id(fd)
   if (!leadId) return
-  await updateRow('admin_leads', leadId, { stage: pick(fd, 'stage', LEAD_STAGES, 'New') })
-  done(back(fd, '/admin/leads'))
+  const stage = pick(fd, 'stage', LEAD_STAGES, 'New')
+  await updateRow('admin_leads', leadId, { stage })
+  done(back(fd, '/admin/leads'), stage === 'Spam' ? 'Marked as spam' : `Moved to ${stage}`)
 }
 
 /** Marks a lead Won and creates (or links) the client record for it. */
@@ -189,14 +198,14 @@ export async function convertLead(fd: FormData) {
     clientId = client.id
   }
   await updateRow('admin_leads', lead.id, { stage: 'Won', client_id: clientId })
-  done(`/admin/clients/${clientId}`)
+  done(`/admin/clients/${clientId}`, 'Won. They are now a client')
 }
 
 export async function deleteLead(fd: FormData) {
   await requireAdmin()
   const leadId = id(fd)
   if (leadId) await deleteRow('admin_leads', leadId)
-  done('/admin/leads')
+  done('/admin/leads', 'Lead deleted')
 }
 
 // ---------- clients ----------
@@ -216,10 +225,10 @@ export async function saveClient(fd: FormData) {
   }
   if (clientId) {
     await updateRow('admin_clients', clientId, values)
-    done(back(fd, `/admin/clients/${clientId}`))
+    done(back(fd, `/admin/clients/${clientId}`), 'Client saved')
   }
   const row = await insertRow('admin_clients', values)
-  done(`/admin/clients/${row.id}`)
+  done(`/admin/clients/${row.id}`, 'Client added')
 }
 
 export async function deleteClient(fd: FormData) {
@@ -232,7 +241,7 @@ export async function deleteClient(fd: FormData) {
     }
     await deleteRow('admin_clients', clientId)
   }
-  done('/admin/clients')
+  done('/admin/clients', 'Client deleted')
 }
 
 // ---------- projects ----------
@@ -262,17 +271,17 @@ export async function saveProject(fd: FormData) {
   }
   if (projectId) {
     await updateRow('admin_projects', projectId, values)
-    done(back(fd, `/admin/projects/${projectId}`))
+    done(back(fd, `/admin/projects/${projectId}`), 'Project saved')
   }
   const row = await insertRow('admin_projects', values)
-  done(`/admin/projects/${row.id}`)
+  done(`/admin/projects/${row.id}`, 'Project added')
 }
 
 export async function deleteProject(fd: FormData) {
   await requireAdmin()
   const projectId = id(fd)
   if (projectId) await deleteRow('admin_projects', projectId)
-  done('/admin/projects')
+  done('/admin/projects', 'Project deleted')
 }
 
 // ---------- tasks (work) ----------
@@ -297,7 +306,7 @@ export async function saveTask(fd: FormData) {
   } else {
     await insertRow('admin_tasks', values)
   }
-  done(back(fd, '/admin/work'))
+  done(back(fd, '/admin/work'), taskId ? 'Task saved' : 'Task added')
 }
 
 export async function setTaskStatus(fd: FormData) {
@@ -309,7 +318,7 @@ export async function setTaskStatus(fd: FormData) {
     status,
     done_at: status === 'Done' ? new Date().toISOString() : null,
   })
-  done(back(fd, '/admin/work'))
+  done(back(fd, '/admin/work'), status === 'Done' ? 'Task done' : status === 'Doing' ? 'Task started' : 'Task reopened')
 }
 
 /** Adds time to a task's running total. */
@@ -322,14 +331,14 @@ export async function logHours(fd: FormData) {
     await updateRow('admin_tasks', task.id, { hours: (Number(task.hours) || 0) + add })
     await insertRow('admin_time_entries', { project_id: task.project_id, task_id: task.id, on_date: today(), hours: add, note: task.title })
   }
-  done(back(fd, '/admin/work'))
+  done(back(fd, '/admin/work'), add && add > 0 ? `Logged ${add} h` : undefined)
 }
 
 export async function deleteTask(fd: FormData) {
   await requireAdmin()
   const taskId = id(fd)
   if (taskId) await deleteRow('admin_tasks', taskId)
-  done(back(fd, '/admin/work'))
+  done(back(fd, '/admin/work'), 'Task deleted')
 }
 
 // ---------- invoices ----------
@@ -383,12 +392,12 @@ export async function saveInvoice(_prev: InvoiceFormState, fd: FormData): Promis
   if (!values.items.length) return { error: 'Add at least one line to the invoice.' }
   if (invoiceId) {
     await updateRow('admin_invoices', invoiceId, values)
-    done(`/admin/invoices/${invoiceId}`)
+    done(`/admin/invoices/${invoiceId}`, 'Invoice saved')
   }
   const row = await insertRow('admin_invoices', values)
   const milestoneId = id(fd, 'milestone_id')
   if (milestoneId) await updateRow('admin_milestones', milestoneId, { invoice_id: row.id })
-  done(`/admin/invoices/${row.id}`)
+  done(`/admin/invoices/${row.id}`, 'Invoice created')
 }
 
 export async function setInvoiceStatus(fd: FormData) {
@@ -397,14 +406,14 @@ export async function setInvoiceStatus(fd: FormData) {
   if (!invoiceId) return
   const status = pick(fd, 'status', INVOICE_STATUSES, 'Draft')
   await updateRow('admin_invoices', invoiceId, { status, paid_on: status === 'Paid' ? today() : null })
-  done(back(fd, `/admin/invoices/${invoiceId}`))
+  done(back(fd, `/admin/invoices/${invoiceId}`), status === 'Paid' ? 'Marked paid' : `Marked ${status.toLowerCase()}`)
 }
 
 export async function deleteInvoice(fd: FormData) {
   await requireAdmin()
   const invoiceId = id(fd)
   if (invoiceId) await deleteRow('admin_invoices', invoiceId)
-  done('/admin/invoices')
+  done('/admin/invoices', 'Invoice deleted')
 }
 
 // ---------- documents ----------
@@ -425,14 +434,14 @@ export async function saveDocument(fd: FormData) {
   }
   if (docId) await updateRow('admin_documents', docId, values)
   else await insertRow('admin_documents', values)
-  done(back(fd, '/admin/documents'))
+  done(back(fd, '/admin/documents'), docId ? 'Document saved' : 'Document added')
 }
 
 export async function deleteDocument(fd: FormData) {
   await requireAdmin()
   const docId = id(fd)
   if (docId) await deleteRow('admin_documents', docId)
-  done(back(fd, '/admin/documents'))
+  done(back(fd, '/admin/documents'), 'Document removed')
 }
 
 // ---------- notes ----------
@@ -448,14 +457,14 @@ export async function addNote(fd: FormData) {
   if (body && (target.lead_id || target.client_id || target.project_id)) {
     await insertRow('admin_notes', { ...target, body })
   }
-  done(back(fd, '/admin'))
+  done(back(fd, '/admin'), 'Note added')
 }
 
 export async function deleteNote(fd: FormData) {
   await requireAdmin()
   const noteId = id(fd)
   if (noteId) await deleteRow('admin_notes', noteId)
-  done(back(fd, '/admin'))
+  done(back(fd, '/admin'), 'Note deleted')
 }
 
 // ---------- settings ----------
@@ -465,7 +474,7 @@ export async function saveSettingsAction(fd: FormData) {
   const values: Record<string, string> = {}
   for (const f of SETTING_FIELDS) values[f.key] = str(fd, f.key, 2000) ?? ''
   await saveSettings(values)
-  done('/admin/settings?saved=1')
+  done('/admin/settings?saved=1', 'Settings saved')
 }
 
 // ---------- milestones ----------
@@ -483,14 +492,14 @@ export async function saveMilestone(fd: FormData) {
   }
   if (milestoneId) await updateRow('admin_milestones', milestoneId, values)
   else await insertRow('admin_milestones', { ...values, position: 0 })
-  done(back(fd, `/admin/projects/${projectId}`))
+  done(back(fd, `/admin/projects/${projectId}`), milestoneId ? 'Milestone saved' : 'Milestone added')
 }
 
 export async function deleteMilestone(fd: FormData) {
   await requireAdmin()
   const milestoneId = id(fd)
   if (milestoneId) await deleteRow('admin_milestones', milestoneId)
-  done(back(fd, '/admin/projects'))
+  done(back(fd, '/admin/projects'), 'Milestone deleted')
 }
 
 // ---------- ticking things off (Today list, milestones) ----------
@@ -517,7 +526,11 @@ export async function checkItem(fd: FormData) {
       await insertRow('admin_notes', { lead_id: itemId, body: 'Followed up.' })
     }
   }
-  done(back(fd, '/admin'))
+  const message =
+    kind === 'lead' ? 'Followed up. It comes back in 3 days'
+    : kind === 'milestone' ? (checked ? 'Milestone done' : 'Milestone reopened')
+    : checked ? 'Task done' : 'Task reopened'
+  done(back(fd, '/admin'), message)
 }
 
 // ---------- time ----------
@@ -525,7 +538,7 @@ export async function checkItem(fd: FormData) {
 export async function logTime(fd: FormData) {
   await requireAdmin()
   const hours = num(fd, 'hours')
-  if (!hours || hours <= 0 || hours > 24) done(back(fd, '/admin/time'))
+  if (!hours || hours <= 0 || hours > 24) done(back(fd, '/admin/time'), 'Nothing logged: enter hours between 0 and 24')
   await insertRow('admin_time_entries', {
     project_id: id(fd, 'project_id'),
     task_id: null,
@@ -533,14 +546,14 @@ export async function logTime(fd: FormData) {
     hours: Math.round(hours! * 100) / 100,
     note: str(fd, 'note', 300),
   })
-  done(back(fd, '/admin/time'))
+  done(back(fd, '/admin/time'), `Logged ${Math.round(hours! * 100) / 100} h`)
 }
 
 export async function deleteTime(fd: FormData) {
   await requireAdmin()
   const entryId = id(fd)
   if (entryId) await deleteRow('admin_time_entries', entryId)
-  done(back(fd, '/admin/time'))
+  done(back(fd, '/admin/time'), 'Time entry deleted')
 }
 
 /** The running timer lives in settings, so it survives closing the browser. */
@@ -551,12 +564,13 @@ export async function startTimer(fd: FormData) {
     timer_note: str(fd, 'note', 200) ?? '',
     timer_started: new Date().toISOString(),
   })
-  done(back(fd, '/admin'))
+  done(back(fd, '/admin'), 'Timer started')
 }
 
 export async function stopTimer(fd: FormData) {
   await requireAdmin()
   const s = await getSettings()
+  let message = 'Timer stopped'
   if (s.timer_started) {
     const minutes = (Date.now() - Date.parse(s.timer_started)) / 60000
     // Round to the nearest quarter hour, at least a quarter.
@@ -564,10 +578,11 @@ export async function stopTimer(fd: FormData) {
     const projectId = Number(s.timer_project) || null
     if (minutes >= 1) {
       await insertRow('admin_time_entries', { project_id: projectId, task_id: null, on_date: today(), hours: Math.min(hours, 24), note: s.timer_note || null })
+      message = `Timer stopped. Logged ${Math.min(hours, 24)} h`
     }
   }
   await saveSettings({ timer_project: '', timer_note: '', timer_started: '' })
-  done(back(fd, '/admin'))
+  done(back(fd, '/admin'), message)
 }
 
 // ---------- ideas (parking lot) ----------
@@ -581,17 +596,19 @@ export async function saveIdea(fd: FormData) {
     status: pick(fd, 'status', IDEA_STATUSES, 'Parked'),
   }
   if (ideaId) {
+    const before = await getRow('admin_ideas', ideaId)
     await updateRow('admin_ideas', ideaId, values)
-    done(back(fd, `/admin/ideas/${ideaId}`))
+    const moved = before && before.status !== values.status && (before.notes ?? '') === (values.notes ?? '')
+    done(back(fd, `/admin/ideas/${ideaId}`), moved ? `Moved to ${values.status}` : 'Idea saved')
   }
   const row = await insertRow('admin_ideas', values)
   // A new idea opens straight away, ready to write up.
-  done(values.notes ? `/admin/ideas/${row.id}` : `/admin/ideas/${row.id}?edit=1`)
+  done(values.notes ? `/admin/ideas/${row.id}` : `/admin/ideas/${row.id}?edit=1`, 'Idea parked')
 }
 
 export async function deleteIdea(fd: FormData) {
   await requireAdmin()
   const ideaId = id(fd)
   if (ideaId) await deleteRow('admin_ideas', ideaId)
-  done(back(fd, '/admin/ideas'))
+  done(back(fd, '/admin/ideas'), 'Idea deleted')
 }

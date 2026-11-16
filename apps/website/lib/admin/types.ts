@@ -4,7 +4,7 @@
  * owner can sign in. Tables are created by supabase/admin.sql.
  */
 
-export const LEAD_STAGES = ['New', 'Contacted', 'Call booked', 'Proposal sent', 'Won', 'Lost'] as const
+export const LEAD_STAGES = ['New', 'Contacted', 'Call booked', 'Proposal sent', 'Won', 'Lost', 'Spam'] as const
 export const OPEN_STAGES: readonly string[] = ['New', 'Contacted', 'Call booked', 'Proposal sent']
 export const LEAD_SOURCES = [
   'Website form',

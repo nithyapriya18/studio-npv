@@ -16,7 +16,8 @@ export default async function LeadsPage({ searchParams }: Props) {
   const { leads } = await loadAll()
   const t = today()
 
-  const inStage = (s: string) => (s === 'Open' ? OPEN_STAGES : s === 'All' ? null : [s])
+  // "All" means every real lead: spam only shows under its own tab.
+  const inStage = (s: string): readonly string[] => (s === 'Open' ? OPEN_STAGES : s === 'All' ? LEAD_STAGES.filter((x) => x !== 'Spam') : [s])
   const count = (s: string) => {
     const set = inStage(s)
     return set ? leads.filter((l) => set.includes(l.stage)).length : leads.length

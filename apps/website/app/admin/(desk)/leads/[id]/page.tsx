@@ -43,7 +43,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
         <div className="space-y-4">
           <Card title="Move to">
             <div className="flex flex-wrap gap-2">
-              {LEAD_STAGES.filter((s) => s !== lead.stage && s !== 'Won').map((s) => (
+              {LEAD_STAGES.filter((s) => s !== lead.stage && s !== 'Won' && s !== 'Spam').map((s) => (
                 <form key={s} action={setLeadStage}>
                   <input type="hidden" name="id" value={lead.id} />
                   <input type="hidden" name="stage" value={s} />
@@ -60,6 +60,16 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
                 </form>
               )}
             </div>
+            {lead.stage !== 'Spam' ? (
+              <form action={setLeadStage}>
+                <input type="hidden" name="id" value={lead.id} />
+                <input type="hidden" name="stage" value="Spam" />
+                <input type="hidden" name="back" value="/admin/leads" />
+                <button type="submit" className="a-linkbtn">Mark as spam</button>
+              </form>
+            ) : (
+              <p className="a-muted">Marked as spam. It stays out of Today, your open leads and the pipeline.</p>
+            )}
             {lead.email || lead.phone ? (
               <p className="mt-3 text-[14px] text-text-muted">
                 {lead.email ? <ExternalLink href={`mailto:${lead.email}`}>{lead.email}</ExternalLink> : null}

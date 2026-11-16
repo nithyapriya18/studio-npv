@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { requireAdmin } from '@/lib/admin/auth'
 import { listRows, storeMode } from '@/lib/admin/store'
 import { loadAll } from '@/lib/admin/data'
@@ -8,6 +9,7 @@ import { isOverdue } from '@/lib/admin/format'
 import { signOut, stopTimer } from '@/app/admin/actions'
 import { NewMenu, SideNav, TabBar, TimerClock } from '@/components/admin/shell'
 import { Icon } from '@/components/admin/icons'
+import { AdminToast } from '@/components/admin/toast'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 export const dynamic = 'force-dynamic'
@@ -100,6 +102,9 @@ export default async function DeskLayout({ children }: { children: React.ReactNo
         {children}
       </main>
       <TabBar />
+      <Suspense fallback={null}>
+        <AdminToast />
+      </Suspense>
     </div>
   )
 }
