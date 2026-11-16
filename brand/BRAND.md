@@ -152,9 +152,9 @@ Write plainly and directly, in the first person. Say what it costs and what you 
 - Add gradients, glows, emoji or stock imagery.
 - Animate anything that loops or follows the cursor.
 
-## 10. Credit line: on everything, always
+## 10. Credit line: websites and apps only
 
-Everything the studio makes carries a credit back to the studio. This is mandatory, for our own work and for client work.
+Every website and app the studio makes carries a credit back to the studio. This is mandatory, for our own work and for client work. Nothing else carries it: no documents, files, decks or posts (decided 16 Nov 2026).
 
 **The line:** **{Product} by Studio NPV**, linked to https://studionpv.com, followed by the tagline where there is room:
 
@@ -167,13 +167,10 @@ Everything the studio makes carries a credit back to the studio. This is mandato
 | Where | How |
 |---|---|
 | Apps and product UI | Footer on every screen, with the link |
-| Generated files (PDF, DWG, documents, exports) | One small line on every page or sheet, plus the file's Creator / Author metadata |
-| Decks | Last slide, plus a small footer on the title slide |
-| READMEs, docs, skills | The first line under the title |
-| Command-line tools | The help text and the version output |
-| Emails and social posts | The signature, or the wordmark bottom-left |
+| Websites | Footer, with the link |
+| Everything else: documents, generated files (PDF, DWG, Word, letterheads, certificates, receipts, payslips, exports), decks, READMEs, emails, social posts | **Never.** No credit line, and no Studio NPV in the Creator / Author metadata; use the client's name there |
 
-**Client work:** the client's brand leads; the credit sits small and quiet (bottom margin or footer), never in their logo or title block.
+**Client work:** the client's brand leads; on a client's website or app the credit sits small and quiet in the footer, never in their logo or title block.
 
 ## Using it outside the website
 
