@@ -90,6 +90,27 @@ function db() {
   return s
 }
 
+
+/**
+ * Supabase now and then rejects a request with "JWT issued at future": two
+ * of its own servers' clocks disagree for a moment, and the same request
+ * works a split second later. Such a request never ran, so it is safe to
+ * retry, reads and writes alike. Reads also retry once on a network blip.
+ */
+type Result<D> = { data: D | null; error: { message: string } | null }
+const clockSkew = (m: string) => /JWT issued at future|JWT.*not yet valid/i.test(m)
+const blip = (m: string) => /fetch failed|ECONNRESET|ETIMEDOUT|network/i.test(m)
+async function run<D>(make: () => PromiseLike<Result<D>>, read = false): Promise<Result<D>> {
+  let res = await make()
+  for (let attempt = 1; attempt <= 3 && res.error; attempt++) {
+    const m = res.error.message
+    if (!clockSkew(m) && !(read && blip(m) && attempt === 1)) break
+    await new Promise((r) => setTimeout(r, 250 * attempt))
+    res = await make()
+  }
+  return res
+}
+
 export async function listRows<T extends TableName>(table: T, opts: ListOptions = {}): Promise<Row<T>[]> {
   if (devStore) {
     const data = await readDev()
@@ -99,11 +120,13 @@ export async function listRows<T extends TableName>(table: T, opts: ListOptions 
     }
     return sortRows(rows, opts.order ?? { column: 'id', ascending: false })
   }
-  let q = db().from(table).select('*')
-  for (const [k, v] of Object.entries(opts.eq ?? {})) q = v === null ? q.is(k, null) : q.eq(k, v)
   const order = opts.order ?? { column: 'id', ascending: false }
-  q = q.order(order.column, { ascending: order.ascending !== false, nullsFirst: false })
-  const { data, error } = await q
+  const query = () => {
+    let q = db().from(table).select('*')
+    for (const [k, v] of Object.entries(opts.eq ?? {})) q = v === null ? q.is(k, null) : q.eq(k, v)
+    return q.order(order.column, { ascending: order.ascending !== false, nullsFirst: false })
+  }
+  const { data, error } = await run(query, true)
   if (error) {
     if (OPTIONAL_TABLES.has(table) && missingTable(error.message)) return []
     fail(`load ${table}`, error.message)
@@ -117,9 +140,9 @@ export async function getRow<T extends TableName>(table: T, id: number): Promise
     const data = await readDev()
     return ((data.rows[table] ?? []).find((r) => r.id === id) as unknown as Row<T>) ?? null
   }
-  const { data, error } = await db().from(table).select('*').eq('id', id).maybeSingle()
+  const { data, error } = await run(() => db().from(table).select('*').eq('id', id).maybeSingle(), true)
   if (error) fail(`load ${table}`, error.message)
-  return (data as Row<T>) ?? null
+  return (data as unknown as Row<T>) ?? null
 }
 
 export async function insertRow<T extends TableName>(table: T, values: Partial<Row<T>>): Promise<Row<T>> {
@@ -133,9 +156,9 @@ export async function insertRow<T extends TableName>(table: T, values: Partial<R
     await writeDev(data)
     return row as unknown as Row<T>
   }
-  const { data, error } = await db().from(table).insert(values as Record<string, unknown>).select('*').single()
+  const { data, error } = await run(() => db().from(table).insert(values as Record<string, unknown>).select('*').single())
   if (error) fail(`save to ${table}`, error.message)
-  return data as Row<T>
+  return data as unknown as Row<T>
 }
 
 export async function updateRow<T extends TableName>(table: T, id: number, values: Partial<Row<T>>) {
@@ -146,7 +169,7 @@ export async function updateRow<T extends TableName>(table: T, id: number, value
     await writeDev(data)
     return
   }
-  const { error } = await db().from(table).update(patch as Record<string, unknown>).eq('id', id)
+  const { error } = await run(() => db().from(table).update(patch as Record<string, unknown>).eq('id', id))
   if (error) fail(`update ${table}`, error.message)
 }
 
@@ -173,7 +196,7 @@ export async function deleteRow(table: TableName, id: number) {
     await writeDev(data)
     return
   }
-  const { error } = await db().from(table).delete().eq('id', id)
+  const { error } = await run(() => db().from(table).delete().eq('id', id))
   if (error) {
     if (/foreign key/i.test(error.message)) {
       throw new Error('This still has invoices attached. Delete or move those invoices first.')
@@ -184,7 +207,7 @@ export async function deleteRow(table: TableName, id: number) {
 
 export async function getSettings(): Promise<Record<string, string>> {
   if (devStore) return (await readDev()).settings
-  const { data, error } = await db().from('admin_settings').select('key, value')
+  const { data, error } = await run(() => db().from('admin_settings').select('key, value'), true)
   if (error) fail('load settings', error.message)
   return Object.fromEntries((data ?? []).map((r) => [r.key as string, (r.value as string) ?? '']))
 }
@@ -197,7 +220,7 @@ export async function saveSettings(values: Record<string, string>) {
     return
   }
   const rows = Object.entries(values).map(([key, value]) => ({ key, value }))
-  const { error } = await db().from('admin_settings').upsert(rows)
+  const { error } = await run(() => db().from('admin_settings').upsert(rows))
   if (error) fail('save settings', error.message)
 }
 

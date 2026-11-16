@@ -1,18 +1,25 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { startTransition } from 'react'
+
+/** Shown inside the admin frame when a page fails to load or save. */
 export default function AdminError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  const router = useRouter()
   return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <h1 className="font-serif text-[30px]">Something went wrong</h1>
-      <p className="mt-2 text-text-muted">
+    <section className="a-card">
+      <h1 className="a-page-title">That didn&apos;t work</h1>
+      <p className="a-muted">
         {process.env.NODE_ENV === 'production'
-          ? 'That didn’t work. Try again. If it keeps failing, check that supabase/admin.sql has been run and the secret key is set in Vercel.'
+          ? 'Usually a passing hiccup with the database. Try again; if it keeps happening, tell Claude the reference below.'
           : error.message}
       </p>
-      {error.digest ? <p className="mt-2 text-[12px] text-text-muted">Reference: {error.digest}</p> : null}
-      <button type="button" className="a-btn a-btn-primary a-btn-sm mt-4" onClick={reset}>
-        Try again
-      </button>
-    </div>
+      <div className="a-head-actions">
+        <button type="button" className="a-btn a-btn-primary" onClick={() => startTransition(() => { router.refresh(); reset() })}>
+          Try again
+        </button>
+      </div>
+      {error.digest ? <p className="a-muted" style={{ fontSize: 12 }}>Reference: {error.digest}</p> : null}
+    </section>
   )
 }
