@@ -580,9 +580,13 @@ export async function saveIdea(fd: FormData) {
     notes: str(fd, 'notes', 10000),
     status: pick(fd, 'status', IDEA_STATUSES, 'Parked'),
   }
-  if (ideaId) await updateRow('admin_ideas', ideaId, values)
-  else await insertRow('admin_ideas', values)
-  done(back(fd, '/admin/ideas'))
+  if (ideaId) {
+    await updateRow('admin_ideas', ideaId, values)
+    done(back(fd, `/admin/ideas/${ideaId}`))
+  }
+  const row = await insertRow('admin_ideas', values)
+  // A new idea opens straight away, ready to write up.
+  done(values.notes ? `/admin/ideas/${row.id}` : `/admin/ideas/${row.id}?edit=1`)
 }
 
 export async function deleteIdea(fd: FormData) {
