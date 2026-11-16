@@ -6,8 +6,8 @@ and one PDF (vector) per sticker. Use either.
 File                                   Order size         Prints at       Qty
 3x3in_lets-talk                        3 x 3 in           3 in round      50
 3x3in_need-a-website-or-app            3 x 3 in           3 x 3 in        50
-4x1.75in_ask-me-to-build-yours         4 x 1.75 in (custom)  4 x 1.69 in     50
-4x1.75in_lets-build-it                 4 x 1.75 in (custom)  4 x 1.73 in     50
+3x2in_ask-me-to-build-yours            3 x 2 in           3 x 1.27 in     50
+3x2in_lets-build-it                    3 x 2 in           3 x 1.3 in      50
 3x2in-upright_say-hi-or-scan-QR        3 x 2 in UPRIGHT   2 x 2.54 in     50   (portrait: 2 in wide, 2.54 in tall)
 3x2in_ask-me-what-im-building          3 x 2 in           2.77 x 2 in     50
 5x3in_i-build-websites-and-apps        5 x 3 in           5 x 1.39 in     50
