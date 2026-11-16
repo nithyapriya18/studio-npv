@@ -16,14 +16,14 @@ DPI = 600
 
 # symbol id, file name, tight viewBox (the sticker's outer white edge), print width and height in inches
 STICKERS = [
-    ("st-talk",   "01-lets-talk_order-3x3in",          (4, 4, 292, 292)),
-    ("st-note",   "02-ask-me-to-build-yours_order-4x2in", (2, 2, 416, 146)),
-    ("st-qr",     "03-say-hi-or-scan-QR_order-3x2in-upright", (0, 0, 260, 330)),
-    ("st-story",  "04-i-build-websites-and-apps_order-5x3in", (0, 0, 540, 150)),
-    ("st-build",  "05-lets-build-it_order-4x2in",       (0, 0, 440, 190)),
-    ("st-ask",    "06-ask-me-what-im-building_order-3x2in", (8, 8, 344, 248)),
-    ("st-napkin", "07-need-a-website-or-app_order-3x3in", (0, 0, 300, 300)),
-    ("st-mark",   "08-studio-npv-wordmark_order-2x1in", (0, 0, 270, 112)),
+    ("st-talk",   "3x3in_lets-talk",          (4, 4, 292, 292)),
+    ("st-note",   "4x2in_ask-me-to-build-yours", (2, 2, 416, 146)),
+    ("st-qr",     "3x2in-upright_say-hi-or-scan-QR", (0, 0, 260, 330)),
+    ("st-story",  "5x3in_i-build-websites-and-apps", (0, 0, 540, 150)),
+    ("st-build",  "4x2in_lets-build-it",       (0, 0, 440, 190)),
+    ("st-ask",    "3x2in_ask-me-what-im-building", (8, 8, 344, 248)),
+    ("st-napkin", "3x3in_need-a-website-or-app", (0, 0, 300, 300)),
+    ("st-mark",   "2x1in_studio-npv-wordmark", (0, 0, 270, 112)),
 ]
 BOX = {"st-talk": (3, 3), "st-note": (4, 2), "st-qr": (2, 3), "st-story": (5, 3),
        "st-build": (4, 2), "st-ask": (3, 2), "st-napkin": (3, 3), "st-mark": (2, 1)}
