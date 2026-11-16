@@ -9,6 +9,6 @@ skills-lock.json
 node_modules
 *.log
 *.tsbuildinfo
-private/
-clients/
+/private/
+/clients/
 .admin-dev-data.json

@@ -7,5 +7,6 @@ export const metadata: Metadata = {
 }
 
 export default function AdminRoot({ children }: { children: React.ReactNode }) {
-  return <div className="py-6 sm:py-8">{children}</div>
+  // .adm-root hides the public header and footer (see admin.css).
+  return <div className="adm-root py-6 sm:py-8">{children}</div>
 }

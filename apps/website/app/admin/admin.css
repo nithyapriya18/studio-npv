@@ -25,6 +25,14 @@
 .adm-alert { background: var(--adm-bad-bg); color: var(--adm-bad-fg); border-color: var(--adm-bad-fg); }
 .adm-bad-text { color: var(--adm-bad-fg); }
 
+/* The public site's header and footer are not shown on admin pages. Done in
+   CSS, keyed on .adm-root, so the server and browser always agree (a
+   client-side check caused a hydration mismatch and a doubled header). */
+body:has(.adm-root) header.hdr,
+body:has(.adm-root) footer.ftr {
+  display: none;
+}
+
 /* Printing an invoice: only the invoice sheet. */
 @media print {
   .adm-no-print { display: none !important; }
