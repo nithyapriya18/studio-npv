@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { requireAdmin } from '@/lib/admin/auth'
-import { storeMode } from '@/lib/admin/store'
+import { listRows, storeMode } from '@/lib/admin/store'
 import { loadAll } from '@/lib/admin/data'
 import { todayItems } from '@/lib/admin/insights'
 import { ACTIVE_PROJECT_STATUSES, OPEN_STAGES } from '@/lib/admin/types'
@@ -41,6 +41,7 @@ export default async function DeskLayout({ children }: { children: React.ReactNo
     clients: data.clients.length,
     projects: data.projects.filter((p) => ACTIVE_PROJECT_STATUSES.includes(p.status)).length,
     overdue: data.invoices.filter(isOverdue).length,
+    ideas: (await listRows('admin_ideas')).filter((i) => i.status === 'Parked' || i.status === 'Exploring').length,
   }
 
   return (

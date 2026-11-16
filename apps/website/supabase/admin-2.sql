@@ -1,4 +1,4 @@
--- Studio admin, part 2: milestones, a time log and project health.
+-- Studio admin, part 2: milestones, a time log, project health and ideas.
 -- Run once in the Supabase SQL editor after admin.sql. Safe to run again.
 
 alter table public.admin_projects add column if not exists summary text;
@@ -29,13 +29,23 @@ create table if not exists public.admin_time_entries (
   created_at timestamptz not null default now()
 );
 
+-- The parking lot: ideas to come back to.
+create table if not exists public.admin_ideas (
+  id bigint generated always as identity primary key,
+  title text not null,
+  notes text,
+  status text not null default 'Parked',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create index if not exists admin_milestones_project_idx on public.admin_milestones (project_id);
 create index if not exists admin_time_entries_date_idx on public.admin_time_entries (on_date);
 
 do $$
 declare t text;
 begin
-  foreach t in array array['admin_milestones', 'admin_time_entries'] loop
+  foreach t in array array['admin_milestones', 'admin_time_entries', 'admin_ideas'] loop
     execute format('alter table public.%I enable row level security', t);
     execute format('revoke all on public.%I from anon, authenticated', t);
   end loop;

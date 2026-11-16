@@ -14,6 +14,7 @@ import {
 import { deleteRow, getRow, getSettings, insertRow, listRows, saveSettings, updateRow } from '@/lib/admin/store'
 import {
   DOCUMENT_KINDS,
+  IDEA_STATUSES,
   INVOICE_STATUSES,
   LEAD_SOURCES,
   LEAD_STAGES,
@@ -567,4 +568,26 @@ export async function stopTimer(fd: FormData) {
   }
   await saveSettings({ timer_project: '', timer_note: '', timer_started: '' })
   done(back(fd, '/admin'))
+}
+
+// ---------- ideas (parking lot) ----------
+
+export async function saveIdea(fd: FormData) {
+  await requireAdmin()
+  const ideaId = id(fd)
+  const values = {
+    title: required(fd, 'title', 'Idea', 200),
+    notes: str(fd, 'notes', 10000),
+    status: pick(fd, 'status', IDEA_STATUSES, 'Parked'),
+  }
+  if (ideaId) await updateRow('admin_ideas', ideaId, values)
+  else await insertRow('admin_ideas', values)
+  done(back(fd, '/admin/ideas'))
+}
+
+export async function deleteIdea(fd: FormData) {
+  await requireAdmin()
+  const ideaId = id(fd)
+  if (ideaId) await deleteRow('admin_ideas', ideaId)
+  done(back(fd, '/admin/ideas'))
 }

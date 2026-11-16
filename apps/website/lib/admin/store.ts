@@ -40,7 +40,7 @@ interface ListOptions {
 }
 
 /** Tables added by supabase/admin-2.sql: until it has been run, read them as empty. */
-const OPTIONAL_TABLES = new Set<string>(['admin_milestones', 'admin_time_entries'])
+const OPTIONAL_TABLES = new Set<string>(['admin_milestones', 'admin_time_entries', 'admin_ideas'])
 const missingTable = (message: string) => /relation .* does not exist|Could not find the table/i.test(message)
 
 function fail(what: string, message: string): never {
@@ -128,7 +128,7 @@ export async function insertRow<T extends TableName>(table: T, values: Partial<R
     const id = (data.seq[table] ?? 0) + 1
     data.seq[table] = id
     const now = new Date().toISOString()
-    const row = { ...values, id, created_at: now, ...(table === 'admin_leads' ? { updated_at: now } : {}) }
+    const row = { ...values, id, created_at: now, ...(table === 'admin_leads' || table === 'admin_ideas' ? { updated_at: now } : {}) }
     data.rows[table] = [...(data.rows[table] ?? []), row]
     await writeDev(data)
     return row as unknown as Row<T>
@@ -139,7 +139,7 @@ export async function insertRow<T extends TableName>(table: T, values: Partial<R
 }
 
 export async function updateRow<T extends TableName>(table: T, id: number, values: Partial<Row<T>>) {
-  const patch = table === 'admin_leads' ? { ...values, updated_at: new Date().toISOString() } : values
+  const patch = table === 'admin_leads' || table === 'admin_ideas' ? { ...values, updated_at: new Date().toISOString() } : values
   if (devStore) {
     const data = await readDev()
     data.rows[table] = (data.rows[table] ?? []).map((r) => (r.id === id ? { ...r, ...patch } : r))

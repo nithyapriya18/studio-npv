@@ -89,6 +89,17 @@ export interface Milestone {
   created_at: string
 }
 
+export const IDEA_STATUSES = ['Parked', 'Exploring', 'Building', 'Dropped'] as const
+
+export interface Idea {
+  id: number
+  title: string
+  notes: string | null
+  status: string
+  created_at: string
+  updated_at: string
+}
+
 export interface TimeEntry {
   id: number
   project_id: number | null
@@ -169,6 +180,7 @@ export interface Tables {
   admin_notes: Note
   admin_milestones: Milestone
   admin_time_entries: TimeEntry
+  admin_ideas: Idea
 }
 export type TableName = keyof Tables
 

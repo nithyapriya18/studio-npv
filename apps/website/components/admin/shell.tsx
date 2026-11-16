@@ -11,6 +11,7 @@ export interface NavCounts {
   clients: number
   projects: number
   overdue: number
+  ideas: number
 }
 
 const NAV = [
@@ -21,6 +22,7 @@ const NAV = [
   { href: '/admin/time', label: 'Time', icon: 'time' },
   { href: '/admin/invoices', label: 'Invoices', icon: 'invoices', count: 'overdue' },
   { href: '/admin/documents', label: 'Documents', icon: 'documents' },
+  { href: '/admin/ideas', label: 'Ideas', icon: 'idea', count: 'ideas' },
 ] as const
 
 function isActive(pathname: string, href: string) {
@@ -116,6 +118,7 @@ export function NewMenu() {
     { href: '/admin/time', label: 'Time entry' },
     { href: '/admin/work', label: 'Task' },
     { href: '/admin/documents', label: 'Document' },
+    { href: '/admin/ideas', label: 'Idea' },
   ]
   return (
     <div className="a-newmenu">

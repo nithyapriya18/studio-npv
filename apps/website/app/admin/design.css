@@ -393,3 +393,6 @@ body:has(.adm-root) main.wrap{max-width:none;padding:0}
   .a-task .a-task-body{flex:1 1 calc(100% - 40px)}
   .a-task > .a-btn{margin-left:38px}
 }
+.a-idea{gap:12px}
+.a-card-head h2.a-idea-title{font:400 26px/1.15 var(--serif)}
+.a-idea-notes{white-space:pre-wrap;font-size:15px}
