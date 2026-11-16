@@ -1,0 +1,108 @@
+/* Studio NPV document style, light scheme (brand/BRAND.md, "Documents"). */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Kalam:wght@300&display=swap");
+
+:root {
+  --indigo: #232C82;
+  --deep-indigo: #161B4F;
+  --marigold: #F5B53F;
+  --vermilion: #C2401E;
+  --paper: #F4F2EC;
+  --turmeric: #FCE9C2;
+  --indigo-wash: #EEEFFA;
+  --ink: #171A33;
+  --slate: #555A78;
+  --line: #DDD9CE;
+}
+
+@page { size: A4; margin: 20mm 18mm 22mm 18mm; }
+@page :first { margin: 0; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Cover: opens on a colour block (Indigo wash in light). */
+.cover {
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  background: var(--paper);
+}
+.cover-band {
+  background: var(--indigo-wash);
+  padding: 22mm 20mm 18mm;
+  flex: 0 0 auto;
+  border-bottom: 3px solid var(--marigold);
+}
+.wordmark { font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 13pt; color: var(--indigo); letter-spacing: -0.01em; }
+.wordmark em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 15pt; }
+.eyebrow { margin-top: 30mm; font-size: 9pt; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate); }
+.cover h1 {
+  font-family: "Instrument Serif", serif; font-weight: 400;
+  font-size: 46pt; line-height: 1.02; letter-spacing: -0.01em;
+  margin: 6mm 0 0; color: var(--ink);
+}
+.cover h1 em { color: var(--indigo); }
+.subtitle { margin-top: 7mm; font-size: 13pt; line-height: 1.45; color: var(--slate); max-width: 150mm; }
+.cover-body { padding: 14mm 20mm; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: flex-end; }
+.meta { display: grid; grid-template-columns: 34mm 1fr; row-gap: 2.5mm; font-size: 10pt; }
+.meta dt { color: var(--slate); }
+.meta dd { margin: 0; font-weight: 500; }
+.note {
+  font-family: "Kalam", cursive; font-weight: 300; color: var(--vermilion);
+  font-size: 14pt; transform: rotate(-2deg); margin-bottom: 14mm; max-width: 120mm;
+}
+
+/* Body */
+main { padding: 0; }
+h1, h2, h3, h4 { font-family: "Instrument Serif", serif; font-weight: 400; color: var(--ink); break-after: avoid; }
+main h1 { font-size: 26pt; line-height: 1.1; margin: 0 0 6mm; }
+main h2 {
+  font-size: 21pt; line-height: 1.15; margin: 11mm 0 4mm; padding-top: 3mm;
+  border-top: 2px solid var(--marigold);
+}
+main h2.first, main > h2:first-child { margin-top: 0; }
+main h3 { font-size: 15pt; margin: 7mm 0 2.5mm; color: var(--indigo); }
+main h4 { font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 10.5pt; margin: 5mm 0 2mm; }
+p { margin: 0 0 3mm; }
+ul, ol { margin: 0 0 3.5mm; padding-left: 6mm; }
+li { margin: 0 0 1.4mm; }
+li::marker { color: var(--indigo); }
+strong { font-weight: 600; }
+a { color: var(--indigo); text-decoration: underline; text-decoration-color: rgba(35,44,130,.35); text-underline-offset: 2px; word-break: break-word; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 7mm 0; }
+code { font-family: ui-monospace, Menlo, monospace; font-size: 9pt; background: var(--paper); padding: 0.3mm 1mm; border-radius: 2px; }
+pre { background: var(--paper); padding: 3mm 4mm; border-radius: 3px; overflow-wrap: anywhere; white-space: pre-wrap; font-size: 9pt; }
+pre code { background: none; padding: 0; }
+
+/* Callouts: blockquotes sit on Turmeric. */
+blockquote {
+  margin: 4mm 0 5mm; padding: 4mm 5mm; background: var(--turmeric);
+  border-left: 3px solid var(--marigold); border-radius: 0 3px 3px 0; break-inside: avoid;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* Tables: Indigo header, hairline rows. */
+table { width: 100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 9pt; line-height: 1.4; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th { background: var(--indigo); color: #fff; font-weight: 600; text-align: left; padding: 2mm 2.4mm; vertical-align: bottom; }
+td { padding: 1.8mm 2.4mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr:nth-child(even) td { background: #FAF9F5; }
+
+/* Table of contents */
+.toc { break-after: page; }
+.toc h2 { border-top: 0; margin-top: 0; padding-top: 0; }
+.toc ol { list-style: none; padding: 0; columns: 1; }
+.toc li { padding: 1.6mm 0; border-bottom: 1px solid var(--line); font-size: 11pt; }
+.toc a { text-decoration: none; color: var(--ink); }
+.toc .num { display: inline-block; width: 9mm; color: var(--indigo); font-family: "Instrument Serif", serif; font-size: 13pt; }

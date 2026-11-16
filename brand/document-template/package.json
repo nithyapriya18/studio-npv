@@ -1,0 +1,13 @@
+{
+  "name": "studio-npv-document-template",
+  "private": true,
+  "type": "module",
+  "description": "Render a Markdown file to a Studio NPV branded PDF (light scheme).",
+  "scripts": {
+    "pdf": "node md-to-pdf.mjs"
+  },
+  "dependencies": {
+    "marked": "14.1.4",
+    "puppeteer-core": "23.11.1"
+  }
+}
