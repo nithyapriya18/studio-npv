@@ -16,7 +16,7 @@ function StatusButton({ id, status, label, primary }: { id: number; status: stri
     <form action={setInvoiceStatus}>
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="status" value={status} />
-      <button type="submit" className={primary ? 'btn-primary btn-sm' : 'btn-quiet btn-sm'}>{label}</button>
+      <button type="submit" className={primary ? 'a-btn a-btn-primary a-btn-sm' : 'a-btn a-btn-quiet a-btn-sm'}>{label}</button>
     </form>
   )
 }
@@ -48,7 +48,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
         }
         action={
           <div className="flex flex-wrap gap-2">
-            <Link href={`/admin/print/invoice/${invoice.id}`} target="_blank" className="btn-primary btn-sm">Open to print or save as PDF</Link>
+            <Link href={`/admin/print/invoice/${invoice.id}`} target="_blank" className="a-btn a-btn-primary a-btn-sm">Open to print or save as PDF</Link>
             {invoice.status === 'Draft' ? <StatusButton id={invoice.id} status="Sent" label="Mark sent" /> : null}
             {invoice.status === 'Sent' ? <StatusButton id={invoice.id} status="Paid" label="Mark paid today" /> : null}
             {invoice.status === 'Paid' ? <StatusButton id={invoice.id} status="Sent" label="Mark unpaid" /> : null}

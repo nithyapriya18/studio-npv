@@ -10,7 +10,7 @@ export default function AdminError({ error, reset }: { error: Error & { digest?:
           : error.message}
       </p>
       {error.digest ? <p className="mt-2 text-[12px] text-text-muted">Reference: {error.digest}</p> : null}
-      <button type="button" className="btn-primary btn-sm mt-4" onClick={reset}>
+      <button type="button" className="a-btn a-btn-primary a-btn-sm mt-4" onClick={reset}>
         Try again
       </button>
     </div>

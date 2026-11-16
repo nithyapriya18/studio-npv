@@ -1,48 +1,12 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useActionState, useMemo, useState, type ReactNode } from 'react'
 import { useFormStatus } from 'react-dom'
 import { signIn, saveInvoice, type InvoiceFormState, type SignInState } from '@/app/admin/actions'
 import { ErrorNote, Field, Input, Select, Textarea, inputCls } from '@/components/admin/ui'
 import { INVOICE_STATUSES, type Invoice, type InvoiceItem } from '@/lib/admin/types'
 
-const NAV = [
-  { href: '/admin', label: 'Today' },
-  { href: '/admin/leads', label: 'Leads' },
-  { href: '/admin/clients', label: 'Clients' },
-  { href: '/admin/projects', label: 'Projects' },
-  { href: '/admin/work', label: 'Work' },
-  { href: '/admin/invoices', label: 'Invoices' },
-  { href: '/admin/documents', label: 'Documents' },
-  { href: '/admin/settings', label: 'Settings' },
-]
-
-export function AdminNav() {
-  const pathname = usePathname() ?? ''
-  return (
-    <nav aria-label="Admin" className="-mx-1 flex gap-1 overflow-x-auto pb-1">
-      {NAV.map((n) => {
-        const active = n.href === '/admin' ? pathname === '/admin' : pathname.startsWith(n.href)
-        return (
-          <Link
-            key={n.href}
-            href={n.href}
-            aria-current={active ? 'page' : undefined}
-            className={`whitespace-nowrap rounded-full px-3.5 py-2 text-[14px] transition-colors ${
-              active ? 'bg-accent font-medium text-card' : 'text-text-primary hover:bg-surface'
-            }`}
-          >
-            {n.label}
-          </Link>
-        )
-      })}
-    </nav>
-  )
-}
-
-export function SubmitButton({ children, className = 'btn-primary btn-sm' }: { children: ReactNode; className?: string }) {
+export function SubmitButton({ children, className = 'a-btn a-btn-primary a-btn-sm' }: { children: ReactNode; className?: string }) {
   const { pending } = useFormStatus()
   return (
     <button type="submit" className={className} disabled={pending}>
@@ -52,7 +16,7 @@ export function SubmitButton({ children, className = 'btn-primary btn-sm' }: { c
 }
 
 /** A submit button that asks first. Use inside a <form> that calls a delete action. */
-export function ConfirmButton({ children, message, className = 'btn-quiet btn-sm' }: { children: ReactNode; message: string; className?: string }) {
+export function ConfirmButton({ children, message, className = 'a-btn a-btn-quiet a-btn-sm' }: { children: ReactNode; message: string; className?: string }) {
   return (
     <button
       type="submit"
@@ -80,7 +44,7 @@ export function LoginForm() {
     <form action={action} className="space-y-4">
       <ErrorNote message={state.error} />
       <Input label="Password" name="password" type="password" autoComplete="current-password" required autoFocus />
-      <button type="submit" className="btn-primary w-full" disabled={pending}>
+      <button type="submit" className="a-btn a-btn-primary w-full" disabled={pending}>
         {pending ? 'Signing in…' : 'Sign in'}
       </button>
     </form>
@@ -108,11 +72,11 @@ export function InvoiceForm({
   clients: Opt[]
   projects: Opt[]
   suggestedNumber: string
-  defaults: { issue_date: string; due_date: string; client_id?: number; project_id?: number }
+  defaults: { issue_date: string; due_date: string; client_id?: number; project_id?: number; items?: InvoiceItem[]; milestone_id?: number }
 }) {
   const [state, action, pending] = useActionState<InvoiceFormState, FormData>(saveInvoice, {})
   const [items, setItems] = useState<InvoiceItem[]>(
-    invoice?.items?.length ? invoice.items : [{ description: '', qty: 1, rate: 0 }],
+    invoice?.items?.length ? invoice.items : defaults.items?.length ? defaults.items : [{ description: '', qty: 1, rate: 0 }],
   )
   const [tax, setTax] = useState<number>(Number(invoice?.tax_percent ?? 0))
   const [clientId, setClientId] = useState<string>(String(invoice?.client_id ?? defaults.client_id ?? ''))
@@ -133,6 +97,7 @@ export function InvoiceForm({
     <form action={action} className="space-y-6">
       <ErrorNote message={state.error} />
       {invoice ? <input type="hidden" name="id" value={invoice.id} /> : null}
+      {defaults.milestone_id ? <input type="hidden" name="milestone_id" value={defaults.milestone_id} /> : null}
       <input type="hidden" name="items" value={JSON.stringify(items)} />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -191,7 +156,7 @@ export function InvoiceForm({
             </div>
           ))}
         </div>
-        <button type="button" className="btn-quiet btn-sm mt-3" onClick={() => setItems((l) => [...l, { description: '', qty: 1, rate: 0 }])}>
+        <button type="button" className="a-btn a-btn-quiet a-btn-sm mt-3" onClick={() => setItems((l) => [...l, { description: '', qty: 1, rate: 0 }])}>
           Add a line
         </button>
       </div>
@@ -212,7 +177,7 @@ export function InvoiceForm({
 
       <Textarea label="Note on the invoice (optional)" name="notes" defaultValue={invoice?.notes ?? ''} rows={3} placeholder="50% advance as agreed in the quote." />
 
-      <button type="submit" className="btn-primary" disabled={pending}>
+      <button type="submit" className="a-btn a-btn-primary" disabled={pending}>
         {pending ? 'Saving…' : invoice ? 'Save invoice' : 'Create invoice'}
       </button>
     </form>

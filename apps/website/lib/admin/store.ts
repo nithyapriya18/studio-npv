@@ -39,6 +39,10 @@ interface ListOptions {
   order?: { column: string; ascending?: boolean }
 }
 
+/** Tables added by supabase/admin-2.sql: until it has been run, read them as empty. */
+const OPTIONAL_TABLES = new Set<string>(['admin_milestones', 'admin_time_entries'])
+const missingTable = (message: string) => /relation .* does not exist|Could not find the table/i.test(message)
+
 function fail(what: string, message: string): never {
   const hint = /relation .* does not exist|Could not find the table/i.test(message)
     ? ' The admin tables are missing: run supabase/admin.sql in the Supabase SQL editor.'
@@ -100,7 +104,10 @@ export async function listRows<T extends TableName>(table: T, opts: ListOptions 
   const order = opts.order ?? { column: 'id', ascending: false }
   q = q.order(order.column, { ascending: order.ascending !== false, nullsFirst: false })
   const { data, error } = await q
-  if (error) fail(`load ${table}`, error.message)
+  if (error) {
+    if (OPTIONAL_TABLES.has(table) && missingTable(error.message)) return []
+    fail(`load ${table}`, error.message)
+  }
   return (data ?? []) as Row<T>[]
 }
 
@@ -153,11 +160,13 @@ export async function deleteRow(table: TableName, id: number) {
       admin_clients: 'client_id',
       admin_leads: 'lead_id',
       admin_projects: 'project_id',
+      admin_tasks: 'task_id',
+      admin_invoices: 'invoice_id',
     }
     const col = links[table]
     if (col) {
       for (const t of Object.keys(data.rows)) {
-        if (t === 'admin_notes') data.rows[t] = data.rows[t].filter((r) => r[col] !== id)
+        if (t === 'admin_notes' || (t === 'admin_milestones' && col === 'project_id')) data.rows[t] = data.rows[t].filter((r) => r[col] !== id)
         else data.rows[t] = data.rows[t].map((r) => (r[col] === id ? { ...r, [col]: null } : r))
       }
     }

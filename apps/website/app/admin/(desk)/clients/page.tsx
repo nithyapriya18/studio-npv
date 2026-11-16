@@ -11,7 +11,7 @@ export default async function ClientsPage() {
   const { clients, projects, invoices } = await loadAll()
   return (
     <>
-      <PageHeader title="Clients" sub="People you work for, with their projects, invoices and documents." action={<Link href="/admin/clients/new" className="btn-primary btn-sm">Add client</Link>} />
+      <PageHeader title="Clients" sub="People you work for, with their projects, invoices and documents." action={<Link href="/admin/clients/new" className="a-btn a-btn-primary a-btn-sm">Add client</Link>} />
       <Card>
         {clients.length ? (
           clients.map((c) => {

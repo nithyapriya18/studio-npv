@@ -36,7 +36,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
             <Badge>{lead.stage}</Badge> <span className="ml-1">{lead.source} · added {shortDate(lead.created_at)}{lead.value ? ` · ${inr(Number(lead.value))}` : ''}</span>
           </>
         }
-        action={<Link href="/admin/leads" className="btn-quiet btn-sm">All leads</Link>}
+        action={<Link href="/admin/leads" className="a-btn a-btn-quiet a-btn-sm">All leads</Link>}
       />
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
@@ -48,15 +48,15 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
                   <input type="hidden" name="id" value={lead.id} />
                   <input type="hidden" name="stage" value={s} />
                   <input type="hidden" name="back" value={back} />
-                  <button type="submit" className="btn-quiet btn-sm">{s}</button>
+                  <button type="submit" className="a-btn a-btn-quiet a-btn-sm">{s}</button>
                 </form>
               ))}
               {client ? (
-                <Link href={`/admin/clients/${client.id}`} className="btn-primary btn-sm">Client: {client.name}</Link>
+                <Link href={`/admin/clients/${client.id}`} className="a-btn a-btn-primary a-btn-sm">Client: {client.name}</Link>
               ) : (
                 <form action={convertLead}>
                   <input type="hidden" name="id" value={lead.id} />
-                  <button type="submit" className="btn-primary btn-sm">Won: make them a client</button>
+                  <button type="submit" className="a-btn a-btn-primary a-btn-sm">Won: make them a client</button>
                 </form>
               )}
             </div>

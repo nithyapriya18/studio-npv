@@ -41,7 +41,7 @@ export default async function LeadsPage({ searchParams }: Props) {
       <PageHeader
         title="Leads"
         sub="Everyone who might become a client. Enquiries from the website's contact form land here by themselves."
-        action={<Link href="/admin/leads/new" className="btn-primary btn-sm">Add lead</Link>}
+        action={<Link href="/admin/leads/new" className="a-btn a-btn-primary a-btn-sm">Add lead</Link>}
       />
       <Tabs items={tabs} current={href(stage)} />
       <form className="mb-4" action="/admin/leads">

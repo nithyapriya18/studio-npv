@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './admin.css'
+import './design.css'
 
 export const metadata: Metadata = {
   title: { default: 'Studio admin', template: '%s | Studio admin' },
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 
 export default function AdminRoot({ children }: { children: React.ReactNode }) {
   // .adm-root hides the public header and footer (see admin.css).
-  return <div className="adm-root py-6 sm:py-8">{children}</div>
+  return <div className="adm-root">{children}</div>
 }

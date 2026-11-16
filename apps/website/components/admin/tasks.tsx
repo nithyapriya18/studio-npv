@@ -29,7 +29,7 @@ export function TaskList({ tasks, back, projectName }: { tasks: Task[]; back: st
               <input type="hidden" name="id" value={k.id} />
               <input type="hidden" name="status" value={next} />
               <input type="hidden" name="back" value={back} />
-              <button type="submit" className="btn-quiet btn-sm min-w-[76px]">{nextLabel}</button>
+              <button type="submit" className="a-btn a-btn-quiet a-btn-sm min-w-[76px]">{nextLabel}</button>
             </form>
             <div className="min-w-0 flex-1">
               <div className={`text-[15px] ${k.status === 'Done' ? 'text-text-muted line-through' : 'text-text-primary'}`}>{k.title}</div>

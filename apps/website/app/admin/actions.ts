@@ -11,19 +11,20 @@ import {
   sessionCookieOptions,
   verifyPassword,
 } from '@/lib/admin/auth'
-import { deleteRow, getRow, insertRow, listRows, saveSettings, updateRow } from '@/lib/admin/store'
+import { deleteRow, getRow, getSettings, insertRow, listRows, saveSettings, updateRow } from '@/lib/admin/store'
 import {
   DOCUMENT_KINDS,
   INVOICE_STATUSES,
   LEAD_SOURCES,
   LEAD_STAGES,
+  PROJECT_HEALTH,
   PROJECT_KINDS,
   PROJECT_STATUSES,
   SETTING_FIELDS,
   TASK_STATUSES,
   type InvoiceItem,
 } from '@/lib/admin/types'
-import { today } from '@/lib/admin/format'
+import { addDays, today } from '@/lib/admin/format'
 import { checkAdminLoginLimit, clientIp } from '@/lib/rate-limit'
 import { siteConfig } from '@/config'
 
@@ -249,6 +250,14 @@ export async function saveProject(fd: FormData) {
     live_url: link(fd, 'live_url'),
     repo_url: link(fd, 'repo_url'),
     notes: str(fd, 'notes', 10000),
+    // Added by supabase/admin-2.sql; only sent when the form has them.
+    ...(fd.has('health')
+      ? {
+          health: pick(fd, 'health', PROJECT_HEALTH, 'On track'),
+          summary: str(fd, 'summary', 200),
+          budget_hours: num(fd, 'budget_hours'),
+        }
+      : {}),
   }
   if (projectId) {
     await updateRow('admin_projects', projectId, values)
@@ -310,6 +319,7 @@ export async function logHours(fd: FormData) {
   const add = num(fd, 'add_hours')
   if (task && add && add > 0 && add <= 24) {
     await updateRow('admin_tasks', task.id, { hours: (Number(task.hours) || 0) + add })
+    await insertRow('admin_time_entries', { project_id: task.project_id, task_id: task.id, on_date: today(), hours: add, note: task.title })
   }
   done(back(fd, '/admin/work'))
 }
@@ -375,6 +385,8 @@ export async function saveInvoice(_prev: InvoiceFormState, fd: FormData): Promis
     done(`/admin/invoices/${invoiceId}`)
   }
   const row = await insertRow('admin_invoices', values)
+  const milestoneId = id(fd, 'milestone_id')
+  if (milestoneId) await updateRow('admin_milestones', milestoneId, { invoice_id: row.id })
   done(`/admin/invoices/${row.id}`)
 }
 
@@ -453,4 +465,106 @@ export async function saveSettingsAction(fd: FormData) {
   for (const f of SETTING_FIELDS) values[f.key] = str(fd, f.key, 2000) ?? ''
   await saveSettings(values)
   done('/admin/settings?saved=1')
+}
+
+// ---------- milestones ----------
+
+export async function saveMilestone(fd: FormData) {
+  await requireAdmin()
+  const milestoneId = id(fd)
+  const projectId = id(fd, 'project_id')
+  if (!projectId) return
+  const values = {
+    project_id: projectId,
+    title: required(fd, 'title', 'Milestone', 200),
+    due_on: date(fd, 'due_on'),
+    amount: num(fd, 'amount'),
+  }
+  if (milestoneId) await updateRow('admin_milestones', milestoneId, values)
+  else await insertRow('admin_milestones', { ...values, position: 0 })
+  done(back(fd, `/admin/projects/${projectId}`))
+}
+
+export async function deleteMilestone(fd: FormData) {
+  await requireAdmin()
+  const milestoneId = id(fd)
+  if (milestoneId) await deleteRow('admin_milestones', milestoneId)
+  done(back(fd, '/admin/projects'))
+}
+
+// ---------- ticking things off (Today list, milestones) ----------
+
+/** One checkbox for tasks, lead follow-ups and milestones. */
+export async function checkItem(fd: FormData) {
+  await requireAdmin()
+  const itemId = id(fd)
+  const kind = str(fd, 'kind', 20)
+  const checked = fd.get('checked') === '1'
+  if (!itemId) return
+  if (kind === 'task') {
+    await updateRow('admin_tasks', itemId, { status: checked ? 'Done' : 'To do', done_at: checked ? new Date().toISOString() : null })
+  } else if (kind === 'milestone') {
+    await updateRow('admin_milestones', itemId, { done_on: checked ? today() : null })
+  } else if (kind === 'lead' && checked) {
+    // Followed up: move a new lead on, log it, and check back in three days.
+    const lead = await getRow('admin_leads', itemId)
+    if (lead) {
+      await updateRow('admin_leads', itemId, {
+        stage: lead.stage === 'New' ? 'Contacted' : lead.stage,
+        follow_up_on: addDays(today(), 3),
+      })
+      await insertRow('admin_notes', { lead_id: itemId, body: 'Followed up.' })
+    }
+  }
+  done(back(fd, '/admin'))
+}
+
+// ---------- time ----------
+
+export async function logTime(fd: FormData) {
+  await requireAdmin()
+  const hours = num(fd, 'hours')
+  if (!hours || hours <= 0 || hours > 24) done(back(fd, '/admin/time'))
+  await insertRow('admin_time_entries', {
+    project_id: id(fd, 'project_id'),
+    task_id: null,
+    on_date: date(fd, 'on_date') ?? today(),
+    hours: Math.round(hours! * 100) / 100,
+    note: str(fd, 'note', 300),
+  })
+  done(back(fd, '/admin/time'))
+}
+
+export async function deleteTime(fd: FormData) {
+  await requireAdmin()
+  const entryId = id(fd)
+  if (entryId) await deleteRow('admin_time_entries', entryId)
+  done(back(fd, '/admin/time'))
+}
+
+/** The running timer lives in settings, so it survives closing the browser. */
+export async function startTimer(fd: FormData) {
+  await requireAdmin()
+  await saveSettings({
+    timer_project: String(id(fd, 'project_id') ?? ''),
+    timer_note: str(fd, 'note', 200) ?? '',
+    timer_started: new Date().toISOString(),
+  })
+  done(back(fd, '/admin'))
+}
+
+export async function stopTimer(fd: FormData) {
+  await requireAdmin()
+  const s = await getSettings()
+  if (s.timer_started) {
+    const minutes = (Date.now() - Date.parse(s.timer_started)) / 60000
+    // Round to the nearest quarter hour, at least a quarter.
+    const hours = Math.max(0.25, Math.round(minutes / 15) / 4)
+    const projectId = Number(s.timer_project) || null
+    if (minutes >= 1) {
+      await insertRow('admin_time_entries', { project_id: projectId, task_id: null, on_date: today(), hours: Math.min(hours, 24), note: s.timer_note || null })
+    }
+  }
+  await saveSettings({ timer_project: '', timer_note: '', timer_started: '' })
+  done(back(fd, '/admin'))
 }

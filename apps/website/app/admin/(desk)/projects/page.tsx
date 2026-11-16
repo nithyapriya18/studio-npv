@@ -20,7 +20,7 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
 
   return (
     <>
-      <PageHeader title="Projects" sub="What you're building, for whom, and when it's due." action={<Link href="/admin/projects/new" className="btn-primary btn-sm">Add project</Link>} />
+      <PageHeader title="Projects" sub="What you're building, for whom, and when it's due." action={<Link href="/admin/projects/new" className="a-btn a-btn-primary a-btn-sm">Add project</Link>} />
       <Tabs items={tabs} current={href(status)} />
       <Card>
         {shown.length ? (

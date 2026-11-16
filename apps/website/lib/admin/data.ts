@@ -1,5 +1,5 @@
 import { requireAdmin } from '@/lib/admin/auth'
-import { listRows } from '@/lib/admin/store'
+import { getSettings, listRows } from '@/lib/admin/store'
 import type { Client, Lead, Project } from '@/lib/admin/types'
 
 /**
@@ -9,15 +9,19 @@ import type { Client, Lead, Project } from '@/lib/admin/types'
  */
 export async function loadAll() {
   await requireAdmin()
-  const [clients, leads, projects, invoices, documents, tasks] = await Promise.all([
+  const [clients, leads, projects, invoices, documents, tasks, milestones, time, notes, settings] = await Promise.all([
     listRows('admin_clients', { order: { column: 'name', ascending: true } }),
     listRows('admin_leads'),
     listRows('admin_projects'),
     listRows('admin_invoices', { order: { column: 'issue_date', ascending: false } }),
     listRows('admin_documents'),
     listRows('admin_tasks'),
+    listRows('admin_milestones', { order: { column: 'due_on', ascending: true } }),
+    listRows('admin_time_entries', { order: { column: 'on_date', ascending: false } }),
+    listRows('admin_notes'),
+    getSettings(),
   ])
-  return { clients, leads, projects, invoices, documents, tasks }
+  return { clients, leads, projects, invoices, documents, tasks, milestones, time, notes, settings }
 }
 
 export function namer(clients: Client[], projects: Project[], leads: Lead[] = []) {

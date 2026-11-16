@@ -9,7 +9,7 @@ export const themeBoot = `try{var t=localStorage.getItem('theme');if(t==='light'
  * Light or dark. Until someone chooses, the page follows their device; once
  * they do, the choice is remembered on this browser.
  */
-export function ThemeToggle() {
+export function ThemeToggle({ className = 'theme-btn' }: { className?: string } = {}) {
   const [dark, setDark] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function ThemeToggle() {
 
   const label = dark ? 'Switch to light mode' : 'Switch to dark mode'
   return (
-    <button type="button" className="theme-btn" onClick={flip} aria-label={label} title={label}>
+    <button type="button" className={className} onClick={flip} aria-label={label} title={label}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         {dark === null ? null : dark ? (
           <>

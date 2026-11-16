@@ -24,7 +24,7 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
 
   return (
     <>
-      <PageHeader title="Invoices" sub="Make an invoice, print it to PDF, and mark it paid when the money comes in." action={<Link href="/admin/invoices/new" className="btn-primary btn-sm">New invoice</Link>} />
+      <PageHeader title="Invoices" sub="Make an invoice, print it to PDF, and mark it paid when the money comes in." action={<Link href="/admin/invoices/new" className="a-btn a-btn-primary a-btn-sm">New invoice</Link>} />
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Stat label="Waiting to be paid" value={inr(sum(sent))} sub={`${sent.length} invoice${sent.length === 1 ? '' : 's'}`} />
         <Stat label="Overdue" value={inr(sum(sent.filter(isOverdue)))} sub={`${sent.filter(isOverdue).length} invoice${sent.filter(isOverdue).length === 1 ? '' : 's'}`} />

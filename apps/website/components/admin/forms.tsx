@@ -13,6 +13,7 @@ import { Card, Empty, ExternalLink, Input, Row, Select, Textarea } from '@/compo
 import { shortDate } from '@/lib/admin/format'
 import {
   DOCUMENT_KINDS,
+  PROJECT_HEALTH,
   LEAD_SOURCES,
   LEAD_STAGES,
   PROJECT_KINDS,
@@ -68,7 +69,7 @@ export function ClientForm({ client }: { client?: Client }) {
   )
 }
 
-export function ProjectForm({ project, clients, clientId }: { project?: Project; clients: Opt[]; clientId?: number }) {
+export function ProjectForm({ project, clients, clientId, extended = true }: { project?: Project; clients: Opt[]; clientId?: number; extended?: boolean }) {
   return (
     <form action={saveProject} className="space-y-4">
       {project ? <input type="hidden" name="id" value={project.id} /> : null}
@@ -84,6 +85,13 @@ export function ProjectForm({ project, clients, clientId }: { project?: Project;
         </div>
         <Input label="Live link" name="live_url" defaultValue={project?.live_url ?? ''} placeholder="example.com" />
         <Input label="Code repository" name="repo_url" defaultValue={project?.repo_url ?? ''} placeholder="github.com/…" />
+        {extended ? (
+          <>
+            <Select label="How it's going" name="health" options={PROJECT_HEALTH} defaultValue={project?.health ?? 'On track'} />
+            <Input label="Hours budget" name="budget_hours" inputMode="decimal" defaultValue={project?.budget_hours ?? ''} placeholder="80" hint="The hours you priced it on. Shows when you go over." />
+            <Input label="One-line summary" name="summary" defaultValue={project?.summary ?? ''} placeholder="Booking site for a tailoring studio" wrap="sm:col-span-2" />
+          </>
+        ) : null}
       </div>
       <Textarea label="Notes" name="notes" defaultValue={project?.notes ?? ''} rows={4} placeholder="Scope, package, what's agreed" />
       <SubmitButton>{project ? 'Save project' : 'Add project'}</SubmitButton>

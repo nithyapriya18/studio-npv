@@ -20,6 +20,8 @@ export const LEAD_SOURCES = [
 export const PROJECT_KINDS = ['Website', 'App', 'Social media', 'Drawings', 'Audit', 'Other'] as const
 export const PROJECT_STATUSES = ['Planning', 'In progress', 'With client', 'Live', 'On hold', 'Done'] as const
 export const ACTIVE_PROJECT_STATUSES: readonly string[] = ['Planning', 'In progress', 'With client']
+/** How a project is going, shown as a tag next to it. */
+export const PROJECT_HEALTH = ['On track', 'At risk', 'Waiting on client', 'Internal'] as const
 
 export const TASK_STATUSES = ['To do', 'Doing', 'Done'] as const
 
@@ -69,6 +71,31 @@ export interface Project {
   live_url: string | null
   repo_url: string | null
   notes: string | null
+  summary?: string | null
+  health?: string | null
+  budget_hours?: number | null
+  created_at: string
+}
+
+export interface Milestone {
+  id: number
+  project_id: number
+  title: string
+  due_on: string | null
+  amount: number | null
+  invoice_id: number | null
+  done_on: string | null
+  position: number
+  created_at: string
+}
+
+export interface TimeEntry {
+  id: number
+  project_id: number | null
+  task_id: number | null
+  on_date: string
+  hours: number
+  note: string | null
   created_at: string
 }
 
@@ -140,6 +167,8 @@ export interface Tables {
   admin_documents: Doc
   admin_tasks: Task
   admin_notes: Note
+  admin_milestones: Milestone
+  admin_time_entries: TimeEntry
 }
 export type TableName = keyof Tables
 
