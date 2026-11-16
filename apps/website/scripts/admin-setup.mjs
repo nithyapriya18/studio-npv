@@ -125,6 +125,5 @@ vercelEnvAdd('ADMIN_SESSION_SECRET', session)
 if (secret) vercelEnvAdd('SUPABASE_SECRET_KEY', secret)
 setLocal({ ADMIN_PASSWORD_HASH: hash, ADMIN_SESSION_SECRET: session, ...(secret ? { SUPABASE_SECRET_KEY: secret } : {}) })
 
-console.log('\nDone. The live site picks this up on its next deploy.')
-console.log('Tell Claude "admin setup done", or redeploy yourself: Vercel → studio-npv → Deployments →')
-console.log('the top one → ⋯ → Redeploy.\n')
+console.log('\nDone. The live site picks this up on its next deploy of the latest code')
+console.log('(a push to main). Tell Claude "admin setup done" and it will deploy and check it.\n')
