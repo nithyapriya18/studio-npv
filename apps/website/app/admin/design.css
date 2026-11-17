@@ -92,8 +92,8 @@
 .a-hero{background:var(--band);color:var(--band-ink);border-radius:24px;padding:32px 36px 28px;display:flex;flex-direction:column;gap:22px}
 .a-hero-date{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--band-muted);font-weight:500}
 .a-hero h1{font:400 58px/1.05 var(--serif);letter-spacing:-.01em;text-wrap:balance}
-.a-circled{position:relative;white-space:nowrap;font-style:italic}
-.a-pen{position:absolute;left:-7%;top:-16%;width:114%;height:132%;fill:none;stroke:var(--marigold);stroke-width:3;stroke-linecap:round;overflow:visible;pointer-events:none}
+.a-circled{position:relative;white-space:nowrap;font-style:italic;padding:0 .14em 0 .3em;margin-left:-.1em}
+.a-pen{position:absolute;left:-6%;top:-16%;width:112%;height:132%;fill:none;stroke:var(--marigold);stroke-width:3;stroke-linecap:round;overflow:visible;pointer-events:none}
 .a-hero-sub{font-size:18px;line-height:1.5;color:var(--band-muted);max-width:64ch;text-wrap:pretty}
 .a-hero-sub b{color:#FFFFFF;font-weight:600}
 .a-pulse{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:12px}
@@ -438,3 +438,17 @@ body:has(.adm-root) main.wrap{max-width:none;padding:0}
 @keyframes a-toast-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.a-toast{animation:none}}
 @container app (max-width:720px){.a-toast-wrap{bottom:92px}}
+
+/* Collapsible sidebar: icons only, labels kept for screen readers. */
+.a-side{transition:flex-basis .2s ease,padding .2s ease;position:sticky;top:0;height:100vh;height:100dvh;overflow-y:auto}
+.a-app .a-nav-toggle{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;border:0;background:transparent;color:var(--side-muted);font-weight:500;cursor:pointer;text-align:left}
+.a-app .a-nav-toggle:hover{background:var(--side-hover);color:var(--side-ink)}
+.a-collapsed .a-side{flex-basis:76px;padding:24px 12px}
+.a-collapsed .a-brand{justify-content:center;padding:4px 0}
+.a-collapsed .a-brand-text,.a-collapsed .a-nav-label{display:none}
+.a-collapsed .a-nav-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.a-collapsed .a-nav a,.a-app.a-collapsed .a-nav-toggle{justify-content:center;padding:0;position:relative}
+.a-collapsed .a-count{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;font-size:10px;background:var(--marigold);color:#161B4F}
+.a-collapsed .a-nav a[aria-current="page"] .a-count{background:#161B4F;color:#F5B53F}
+@media (prefers-reduced-motion:reduce){.a-side{transition:none}}
+.a-collapsed .a-count.a-alert{background:#FF8F6B;color:#161B4F}

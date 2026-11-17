@@ -205,3 +205,6 @@ export const SETTING_FIELDS = [
 ] as const
 
 export type SettingKey = (typeof SETTING_FIELDS)[number]['key']
+
+/** Cookie that remembers a collapsed sidebar, so the page loads the same way next time. */
+export const NAV_COOKIE = 'adm_nav'

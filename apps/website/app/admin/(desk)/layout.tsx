@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { Suspense } from 'react'
 import { requireAdmin } from '@/lib/admin/auth'
 import { listRows, storeMode } from '@/lib/admin/store'
 import { loadAll } from '@/lib/admin/data'
 import { todayItems } from '@/lib/admin/insights'
-import { ACTIVE_PROJECT_STATUSES, OPEN_STAGES } from '@/lib/admin/types'
+import { ACTIVE_PROJECT_STATUSES, NAV_COOKIE, OPEN_STAGES } from '@/lib/admin/types'
 import { isOverdue } from '@/lib/admin/format'
 import { signOut, stopTimer } from '@/app/admin/actions'
 import { NewMenu, SideNav, TabBar, TimerClock } from '@/components/admin/shell'
@@ -46,8 +47,10 @@ export default async function DeskLayout({ children }: { children: React.ReactNo
     ideas: (await listRows('admin_ideas')).filter((i) => i.status === 'Parked' || i.status === 'Exploring').length,
   }
 
+  const collapsed = (await cookies()).get(NAV_COOKIE)?.value === 'collapsed'
+
   return (
-    <div className="a-app">
+    <div className={`a-app${collapsed ? ' a-collapsed' : ''}`}>
       <aside className="a-side" aria-label="Studio navigation">
         <Link className="a-brand" href="/admin">
           <span className="a-brand-mark">NPV</span>
@@ -56,7 +59,7 @@ export default async function DeskLayout({ children }: { children: React.ReactNo
             <span className="a-brand-sub">Admin</span>
           </span>
         </Link>
-        <SideNav counts={counts} />
+        <SideNav counts={counts} collapsed={collapsed} />
       </aside>
 
       <main className="a-main">

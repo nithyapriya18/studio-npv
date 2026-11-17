@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Icon } from '@/components/admin/icons'
+import { NAV_COOKIE } from '@/lib/admin/types'
 
 export interface NavCounts {
   today: number
@@ -31,8 +32,16 @@ function isActive(pathname: string, href: string) {
   return pathname.startsWith(href)
 }
 
-export function SideNav({ counts }: { counts: NavCounts }) {
+export function SideNav({ counts, collapsed: startCollapsed }: { counts: NavCounts; collapsed: boolean }) {
   const pathname = usePathname() ?? ''
+  const [collapsed, setCollapsed] = useState(startCollapsed)
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const next = !collapsed
+    setCollapsed(next)
+    e.currentTarget.closest('.a-app')?.classList.toggle('a-collapsed', next)
+    document.cookie = `${NAV_COOKIE}=${next ? 'collapsed' : 'open'}; path=/admin; max-age=31536000; samesite=lax`
+  }
+  const tip = (label: string) => (collapsed ? label : undefined)
   return (
     <>
       <nav className="a-nav" aria-label="Admin">
@@ -40,9 +49,9 @@ export function SideNav({ counts }: { counts: NavCounts }) {
         {NAV.map((n) => {
           const c = 'count' in n ? counts[n.count] : 0
           return (
-            <Link key={n.href} href={n.href} aria-current={isActive(pathname, n.href) ? 'page' : undefined}>
+            <Link key={n.href} href={n.href} title={tip(n.label)} aria-current={isActive(pathname, n.href) ? 'page' : undefined}>
               <Icon name={n.icon} />
-              {n.label}
+              <span className="a-nav-text">{n.label}</span>
               {c ? (
                 <span className={`a-count${n.href === '/admin/invoices' ? ' a-alert' : ''}`} aria-label={n.href === '/admin/invoices' ? `${c} overdue` : undefined}>
                   {c}
@@ -53,14 +62,18 @@ export function SideNav({ counts }: { counts: NavCounts }) {
         })}
       </nav>
       <div className="a-side-foot a-nav">
-        <Link href="/" target="_blank">
+        <Link href="/" target="_blank" title={tip('studionpv.com')}>
           <Icon name="external" />
-          studionpv.com
+          <span className="a-nav-text">studionpv.com</span>
         </Link>
-        <Link href="/admin/settings" aria-current={pathname.startsWith('/admin/settings') ? 'page' : undefined}>
+        <Link href="/admin/settings" title={tip('Settings')} aria-current={pathname.startsWith('/admin/settings') ? 'page' : undefined}>
           <Icon name="settings" />
-          Settings
+          <span className="a-nav-text">Settings</span>
         </Link>
+        <button type="button" className="a-nav-toggle" onClick={toggle} aria-expanded={!collapsed} title={tip('Expand sidebar')}>
+          <Icon name={collapsed ? 'sidebarOpen' : 'sidebar'} />
+          <span className="a-nav-text">{collapsed ? 'Expand sidebar' : 'Collapse sidebar'}</span>
+        </button>
       </div>
     </>
   )
