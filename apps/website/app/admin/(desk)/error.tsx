@@ -1,11 +1,18 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { startTransition } from 'react'
+import { useAutoRetry } from '@/components/admin/use-auto-retry'
 
-/** Shown inside the admin frame when a page fails to load or save. */
-export default function AdminError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const router = useRouter()
+/** Shown inside the admin frame when a page fails to load or save. Retries once by itself first. */
+export default function AdminError({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
+  const retrying = useAutoRetry(error, retry)
+  if (retrying) {
+    return (
+      <section className="a-card">
+        <h1 className="a-page-title">One moment</h1>
+        <p className="a-muted">The database was slow to answer. Loading again…</p>
+      </section>
+    )
+  }
   return (
     <section className="a-card">
       <h1 className="a-page-title">That didn&apos;t work</h1>
@@ -15,7 +22,7 @@ export default function AdminError({ error, reset }: { error: Error & { digest?:
           : error.message}
       </p>
       <div className="a-head-actions">
-        <button type="button" className="a-btn a-btn-primary" onClick={() => startTransition(() => { router.refresh(); reset() })}>
+        <button type="button" className="a-btn a-btn-primary" onClick={() => retry()}>
           Try again
         </button>
       </div>

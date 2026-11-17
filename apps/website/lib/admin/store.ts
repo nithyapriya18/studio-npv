@@ -92,22 +92,27 @@ function db() {
 
 
 /**
- * Supabase now and then rejects a request with "JWT issued at future": two
- * of its own servers' clocks disagree for a moment, and the same request
- * works a split second later. Such a request never ran, so it is safe to
- * retry, reads and writes alike. Reads also retry once on a network blip.
+ * Supabase now and then rejects a request with "JWT issued at future": with
+ * the sb_secret key its gateway stamps a short-lived token with its own
+ * clock, and the database's clock can lag behind it. The same request works
+ * once the clocks line up, which has taken longer than 1.5 seconds in
+ * production (17 Nov 2026), so keep trying for up to about 8 seconds. Such a
+ * request never ran, so it is safe to retry, reads and writes alike. Reads
+ * also retry once on a network blip.
  */
 type Result<D> = { data: D | null; error: { message: string } | null }
 const clockSkew = (m: string) => /JWT issued at future|JWT.*not yet valid/i.test(m)
 const blip = (m: string) => /fetch failed|ECONNRESET|ETIMEDOUT|network/i.test(m)
+const SKEW_WAITS_MS = [300, 600, 1000, 1500, 2000, 2500]
 async function run<D>(make: () => PromiseLike<Result<D>>, read = false): Promise<Result<D>> {
   let res = await make()
-  for (let attempt = 1; attempt <= 3 && res.error; attempt++) {
+  for (let attempt = 1; attempt <= SKEW_WAITS_MS.length && res.error; attempt++) {
     const m = res.error.message
     if (!clockSkew(m) && !(read && blip(m) && attempt === 1)) break
-    await new Promise((r) => setTimeout(r, 250 * attempt))
+    await new Promise((r) => setTimeout(r, SKEW_WAITS_MS[attempt - 1]))
     res = await make()
   }
+  if (res.error && clockSkew(res.error.message)) console.error('[admin] Supabase clock skew outlasted the retries:', res.error.message)
   return res
 }
 
